@@ -2,7 +2,7 @@
 
 Using PhotosFramework
 
-[ ]Like UIImagePicker
-[ ]Multiple Selection
-[ ]Divide daily
-[ ]Crop
+- [ ] Like UIImagePicker
+- [ ] Multiple Selection
+- [ ] Divide daily
+- [ ] Crop
