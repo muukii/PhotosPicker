@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B0C27F21ABEFE8600F27D51 /* PhotosPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C27F11ABEFE8600F27D51 /* PhotosPickerController.swift */; };
+		4B0C27F41ABEFED700F27D51 /* PhotosPickerCameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */; };
 		4B1A2BE71ABB332400736F15 /* PhotosPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B1A2BE61ABB332400736F15 /* PhotosPicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4B1A2BED1ABB332500736F15 /* PhotosPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B1A2BE11ABB332400736F15 /* PhotosPicker.framework */; };
 		4B1A2BF41ABB332500736F15 /* PhotosPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1A2BF31ABB332500736F15 /* PhotosPickerTests.swift */; };
@@ -23,6 +25,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4B0C27F11ABEFE8600F27D51 /* PhotosPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerController.swift; sourceTree = "<group>"; };
+		4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCameraController.swift; sourceTree = "<group>"; };
 		4B1A2BE11ABB332400736F15 /* PhotosPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotosPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1A2BE51ABB332400736F15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B1A2BE61ABB332400736F15 /* PhotosPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotosPicker.h; sourceTree = "<group>"; };
@@ -50,6 +54,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B0C27F01ABEFE3A00F27D51 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				4B0C27F11ABEFE8600F27D51 /* PhotosPickerController.swift */,
+				4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
 		4B1A2BD71ABB332400736F15 = {
 			isa = PBXGroup;
 			children = (
@@ -71,6 +84,7 @@
 		4B1A2BE31ABB332400736F15 /* PhotosPicker */ = {
 			isa = PBXGroup;
 			children = (
+				4B0C27F01ABEFE3A00F27D51 /* Sources */,
 				4B1A2BE61ABB332400736F15 /* PhotosPicker.h */,
 				4B1A2BE41ABB332400736F15 /* Supporting Files */,
 			);
@@ -209,6 +223,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B0C27F21ABEFE8600F27D51 /* PhotosPickerController.swift in Sources */,
+				4B0C27F41ABEFED700F27D51 /* PhotosPickerCameraController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +339,7 @@
 		4B1A2BF81ABB332500736F15 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -332,12 +349,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		4B1A2BF91ABB332500736F15 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -399,6 +418,7 @@
 				4B1A2BF91ABB332500736F15 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4B1A2BFA1ABB332500736F15 /* Build configuration list for PBXNativeTarget "PhotosPickerTests" */ = {
 			isa = XCConfigurationList;
@@ -407,6 +427,7 @@
 				4B1A2BFC1ABB332500736F15 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
