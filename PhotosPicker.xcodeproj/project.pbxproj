@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		4B0C27F21ABEFE8600F27D51 /* PhotosPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C27F11ABEFE8600F27D51 /* PhotosPickerController.swift */; };
 		4B0C27F41ABEFED700F27D51 /* PhotosPickerCameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */; };
+		4B0C27F61ABF181800F27D51 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0C27F51ABF181800F27D51 /* Photos.framework */; };
+		4B0C27F81ABF18AE00F27D51 /* PhotosPickerAssetsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C27F71ABF18AE00F27D51 /* PhotosPickerAssetsController.swift */; };
+		4B0C27FA1ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C27F91ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift */; };
 		4B1A2BE71ABB332400736F15 /* PhotosPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B1A2BE61ABB332400736F15 /* PhotosPicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4B1A2BED1ABB332500736F15 /* PhotosPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B1A2BE11ABB332400736F15 /* PhotosPicker.framework */; };
 		4B1A2BF41ABB332500736F15 /* PhotosPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1A2BF31ABB332500736F15 /* PhotosPickerTests.swift */; };
@@ -27,6 +30,9 @@
 /* Begin PBXFileReference section */
 		4B0C27F11ABEFE8600F27D51 /* PhotosPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerController.swift; sourceTree = "<group>"; };
 		4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCameraController.swift; sourceTree = "<group>"; };
+		4B0C27F51ABF181800F27D51 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		4B0C27F71ABF18AE00F27D51 /* PhotosPickerAssetsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerAssetsController.swift; sourceTree = "<group>"; };
+		4B0C27F91ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsController.swift; sourceTree = "<group>"; };
 		4B1A2BE11ABB332400736F15 /* PhotosPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhotosPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1A2BE51ABB332400736F15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B1A2BE61ABB332400736F15 /* PhotosPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotosPicker.h; sourceTree = "<group>"; };
@@ -40,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B0C27F61ABF181800F27D51 /* Photos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +65,8 @@
 			isa = PBXGroup;
 			children = (
 				4B0C27F11ABEFE8600F27D51 /* PhotosPickerController.swift */,
+				4B0C27F91ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift */,
+				4B0C27F71ABF18AE00F27D51 /* PhotosPickerAssetsController.swift */,
 				4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */,
 			);
 			path = Sources;
@@ -66,6 +75,7 @@
 		4B1A2BD71ABB332400736F15 = {
 			isa = PBXGroup;
 			children = (
+				4B0C27F51ABF181800F27D51 /* Photos.framework */,
 				4B1A2BE31ABB332400736F15 /* PhotosPicker */,
 				4B1A2BF01ABB332500736F15 /* PhotosPickerTests */,
 				4B1A2BE21ABB332400736F15 /* Products */,
@@ -223,8 +233,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B0C27FA1ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift in Sources */,
 				4B0C27F21ABEFE8600F27D51 /* PhotosPickerController.swift in Sources */,
 				4B0C27F41ABEFED700F27D51 /* PhotosPickerCameraController.swift in Sources */,
+				4B0C27F81ABF18AE00F27D51 /* PhotosPickerAssetsController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

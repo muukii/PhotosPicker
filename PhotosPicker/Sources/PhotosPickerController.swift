@@ -7,13 +7,29 @@
 //
 
 import UIKit
+import Foundation
+import Photos
 
-class PhotosPickerController: UINavigationController {
+/**
+* PhotosPickerController
+*/
+public class PhotosPickerController: UINavigationController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    private(set) var collectionController: PhotosPickerCollectionsController?
+    private(set) var assetsControllerClass: PhotosPickerAssetsController.Type?
+    private(set) var collectionControllerClass: PhotosPickerCollectionsController.Type?
+    
+    public convenience init() {
+        
+        self.init(rootViewController: PhotosPickerCollectionsController())
     }
-
+    
+    public convenience init(collectionControllerClass: PhotosPickerCollectionsController.Type?, assetsControllerClass: PhotosPickerAssetsController.Type?) {
+        
+        self.init()
+        self.assetsControllerClass = assetsControllerClass
+        self.collectionControllerClass = collectionControllerClass
+        
+//        self.collectionController = self.collectionControllerClass?(nibName: nil, bundle: nil)
+    }
 }
