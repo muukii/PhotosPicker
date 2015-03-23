@@ -19,9 +19,53 @@ public class PhotosPickerCollectionsController: UIViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.view.addSubview(tableView)
         self.tableView = tableView
+        
+        let tableViewTop = NSLayoutConstraint(
+            item: tableView,
+            attribute: .Top,
+            relatedBy: .Equal,
+            toItem: self.view,
+            attribute: .Top,
+            multiplier: 1,
+            constant: 0)
+        
+        let tableViewRight = NSLayoutConstraint(
+            item: tableView,
+            attribute: .Right,
+            relatedBy: .Equal,
+            toItem: self.view,
+            attribute: .Right,
+            multiplier: 1,
+            constant: 0)
+        
+        let tableViewBottom = NSLayoutConstraint(
+            item: tableView,
+            attribute: .Bottom,
+            relatedBy: .Equal,
+            toItem: self.view,
+            attribute: .Bottom,
+            multiplier: 1,
+            constant: 0)
+        
+        let tableViewLeft = NSLayoutConstraint(
+            item: tableView,
+            attribute: .Left,
+            relatedBy: .Equal,
+            toItem: self.view,
+            attribute: .Left,
+            multiplier: 1,
+            constant: 0)
+        
+        self.view.addConstraints([
+            tableViewTop,
+            tableViewRight,
+            tableViewBottom,
+            tableViewLeft,
+            ])
     }
     
     public convenience init() {
