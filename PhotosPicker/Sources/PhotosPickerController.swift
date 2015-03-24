@@ -10,26 +10,17 @@ import UIKit
 import Foundation
 import Photos
 
+public protocol PhotosPickerProtocol: class {
+    
+}
+
 /**
 * PhotosPickerController
 */
-public class PhotosPickerController: UINavigationController {
+public class PhotosPickerController<T where T: PhotosPickerCollectionsController, T: PhotosPickerProtocol/*, U where U: PhotosPickerProtocol, U: PhotosPickerAssetsController*/>: UINavigationController {
 
-    private(set) var collectionController: PhotosPickerCollectionsController?
-    private(set) var assetsControllerClass: PhotosPickerAssetsController.Type?
-    private(set) var collectionControllerClass: PhotosPickerCollectionsController.Type?
+    private(set) var collectionController: T?
+//    private(set) var assetsControllerClass: U.Type?
+    private(set) var collectionControllerClass: T.Type?
     
-    public convenience init() {
-        
-        self.init(rootViewController: PhotosPickerCollectionsController())
-    }
-    
-    public convenience init(collectionControllerClass: PhotosPickerCollectionsController.Type?, assetsControllerClass: PhotosPickerAssetsController.Type?) {
-        
-        self.init()
-        self.assetsControllerClass = assetsControllerClass
-        self.collectionControllerClass = collectionControllerClass
-        
-//        self.collectionController = self.collectionControllerClass?(nibName: nil, bundle: nil)
-    }
 }
