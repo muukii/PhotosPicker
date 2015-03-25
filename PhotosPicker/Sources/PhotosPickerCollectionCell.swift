@@ -24,6 +24,6 @@ import UIKit
 import Foundation
 import Photos
 
-class PhotosPickerCollectionCell: UITableViewCell {
+public class PhotosPickerCollectionCell: UITableViewCell {
 
 }
