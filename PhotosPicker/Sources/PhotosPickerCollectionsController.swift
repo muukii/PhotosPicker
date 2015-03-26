@@ -25,13 +25,71 @@ import Foundation
 import Photos
 
 public class PhotosPickerCollectionsController: UIViewController {
+    
+    public struct Collection {
+        var collection: PHAssetCollection
+        var title: String?
+        var numberOfAssets: Int?
+        
+        struct Thumbnail {
+            var asset: PHAsset
+            var cachedImage: UIImage?
+        }
+        var top3Assets: [PHAsset]?
+        var cachedTop3Images: [UIImage]?
+        init(collection: PHAssetCollection) {
+            
+            self.collection = collection
+            self.title = collection.localizedTitle
+            self.numberOfAssets = collection.estimatedAssetCount
+            
+            let options = PHFetchOptions()
+            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+            options.includeHiddenAssets = false
+            options.wantsIncrementalChangeDetails = false
+            
+            if let assets = PHAsset.fetchAssetsInAssetCollection(self.collection, options: options) {
+                
+                self.numberOfAssets = assets.count
+                
+                self.top3Assets = []
+                assets.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
+                    
+                    self.top3Assets?.append((asset as! PHAsset))
+                    if index == 2 {
+                        
+                        stop.memory = true
+                    }
+                })
+            }
+
+        }
+        
+    }
 
     public weak var tableView: UITableView?
     public var photoLibrary = PHPhotoLibrary.sharedPhotoLibrary()
+    public var collections: [Collection]?
+    var imageManager = PHImageManager.defaultManager()
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    public convenience init() {
+        
+        self.init(nibName: nil, bundle: nil)
+    }
+
+    public required init(coder aDecoder: NSCoder) {
+        
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override public func viewDidLoad() {
+        
+        super.viewDidLoad()
         
         let tableView = UITableView()
         tableView.delegate = self
@@ -41,95 +99,106 @@ public class PhotosPickerCollectionsController: UIViewController {
         self.view.addSubview(tableView)
         self.tableView = tableView
         
-        let tableViewTop = NSLayoutConstraint(
-            item: tableView,
-            attribute: .Top,
-            relatedBy: .Equal,
-            toItem: self.view,
-            attribute: .Top,
-            multiplier: 1,
-            constant: 0)
+        let views = ["tableView": tableView]
         
-        let tableViewRight = NSLayoutConstraint(
-            item: tableView,
-            attribute: .Right,
-            relatedBy: .Equal,
-            toItem: self.view,
-            attribute: .Right,
-            multiplier: 1,
-            constant: 0)
+        self.view.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "H:|-0-[tableView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+            )
+        )
         
-        let tableViewBottom = NSLayoutConstraint(
-            item: tableView,
-            attribute: .Bottom,
-            relatedBy: .Equal,
-            toItem: self.view,
-            attribute: .Bottom,
-            multiplier: 1,
-            constant: 0)
+        self.view.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "V:|-0-[tableView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+            )
+        )
         
-        let tableViewLeft = NSLayoutConstraint(
-            item: tableView,
-            attribute: .Left,
-            relatedBy: .Equal,
-            toItem: self.view,
-            attribute: .Left,
-            multiplier: 1,
-            constant: 0)
+        self.tableView?.registerClass(self.cellClass(), forCellReuseIdentifier: "Cell")
+        println(self.tableView)
         
-        self.view.addConstraints([
-            tableViewTop,
-            tableViewRight,
-            tableViewBottom,
-            tableViewLeft,
-            ])
+        if let collections = self.presentCollections() {
+            
+            self.collections = []
+            for collection in collections {
+                collection.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
+                    
+                    if let collection = collection as? PHAssetCollection {
+                        
+                        self.collections?.append(Collection(collection: collection))
+                    }
+                })
+            }
+        }
     }
     
-    public convenience init() {
+    public func cellClass() -> PhotosPickerCollectionCell.Type {
         
-        self.init(nibName: nil, bundle: nil)
-    }
-
-    public required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return PhotosPickerCollectionCell.self
     }
     
-    override public func viewDidLoad() {
-        super.viewDidLoad()
-
-        let collection = self.presentCollections()
-        println(collection)
-        // Do any additional setup after loading the view.
-    }
-    
-    public func presentCollections() -> PHFetchResult? {
+    public func presentCollections() -> [PHFetchResult]? {
         
         let result = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+
         println(result)
         result.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
             println(collection)
         }
-        
-        return result
+        let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
+
+        return [smartAlbums, result]
     }
     
+    public class func getTopImage(collection: PHAssetCollection, result: ((image: UIImage) -> Void)?) {
+        
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        options.includeHiddenAssets = false
+        options.wantsIncrementalChangeDetails = false
+        
+        if let assets = PHAsset.fetchAssetsInAssetCollection(collection, options: options) {
+                        
+            if let firstAsset = assets.firstObject as? PHAsset {
+                PHImageManager.defaultManager().requestImageForAsset(firstAsset, targetSize: CGSizeMake(100,100), contentMode: PHImageContentMode.AspectFill, options: nil, resultHandler: { (image, info) -> Void in
+                    
+                    result?(image: image)
+                    return
+                })
+            }
+        }
+    }
 }
 
 extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDataSource {
     
     public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-        return 0
+        return 1
     }
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 0
+        return self.collections?.count ?? 0
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerCollectionCell
+        
+        if let collection = self.collections?[indexPath.row] {
+            cell.thumbnailImageView?.image = collection.top3Assets?.first
+//            PhotosPickerCollectionsController.getTopImage(collection.collection, result: { [weak cell] (image) -> Void in
+//                
+//                cell?.thumbnailImageView?.image = image
+//                return
+//            })
+        }
+        return cell
+    }
+    
+    public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        return PhotosPickerCollectionCell.heightForRow()
     }
 }
 

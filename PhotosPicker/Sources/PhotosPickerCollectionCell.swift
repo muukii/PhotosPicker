@@ -25,5 +25,79 @@ import Foundation
 import Photos
 
 public class PhotosPickerCollectionCell: UITableViewCell {
+    
+    public weak var thumbnailImageView: UIImageView?
+    public weak var collectionTitleLabel: UILabel?
+    
+    public var collection: PHAssetCollection? {
+        get {
+            
+            return _collection
+        }
+        set {
+            
+            
+        }
+    }
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.setup()
+    }
 
+    public required init(coder aDecoder: NSCoder) {
+        
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func setup() {
+        
+        let thumbnailImageView = UIImageView()
+        thumbnailImageView.contentMode = .ScaleAspectFill
+        thumbnailImageView.clipsToBounds = true
+        thumbnailImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        let collectionTitleLabel = UILabel()
+        collectionTitleLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        self.contentView.addSubview(thumbnailImageView)
+        self.contentView.addSubview(collectionTitleLabel)
+        
+        self.thumbnailImageView = thumbnailImageView
+        self.collectionTitleLabel = collectionTitleLabel
+    
+        
+        let views = [
+            "thumbnailImageView": thumbnailImageView,
+            "collectionTitleLabel": collectionTitleLabel
+        ]
+        
+        self.contentView.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "V:|-(10)-[thumbnailImageView(50)]", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+            )
+        )
+        
+        self.contentView.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "|-(10)-[thumbnailImageView(50)]-(10)-[collectionTitleLabel]-(10)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+            )
+        )
+        
+        self.contentView.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "V:|-(>=10)-[collectionTitleLabel]-(>=10)-|", options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views
+            )
+        )
+        
+    }
+    
+    public class func heightForRow() -> CGFloat {
+        
+        return 70.0
+    }
+    
+    private var _collection: PHAssetCollection?
 }
+

@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         
         super.viewDidAppear(animated)
-        let controller = PhotosPickerController<PhotosPickerCollectionsController>()
+        let controller = PhotosPickerController<PhotosPickerCollectionsController, PhotosPickerAssetsController>()
         self.presentViewController(controller, animated: true) { () -> Void in
             
         }

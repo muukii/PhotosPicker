@@ -31,15 +31,35 @@ public protocol PhotosPickerProtocol: class {
 /**
 * PhotosPickerController
 */
-public class PhotosPickerController<T where T: PhotosPickerCollectionsController, T: PhotosPickerProtocol/*, U where U: PhotosPickerProtocol, U: PhotosPickerAssetsController*/>: UINavigationController {
-
-    private(set) var collectionController: T?
-//    private(set) var assetsControllerClass: U.Type?
-    private(set) var collectionControllerClass: T.Type?
+public class PhotosPickerController<T: PhotosPickerCollectionsController, U: PhotosPickerAssetsController>: UINavigationController {
     
+    private(set) var collectionController: T?
+    
+    ///
+    var allowsEditing: Bool
+    
+    /**
+    
+    
+    :returns:
+    */
     public init() {
         
+        self.allowsEditing = false
+
         let controller = T(nibName: nil, bundle: nil)
+        self.collectionController = controller
         super.init(rootViewController: controller)
+    }
+    
+    /**
+    
+    
+    :param: collection
+    */
+    func pushAssetsController(let collection: PHCollection) {
+        
+        let controller = U(nibName: nil, bundle: nil)
+        self.pushViewController(controller, animated: true)
     }
 }
