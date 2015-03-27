@@ -26,22 +26,48 @@ import Photos
 
 public class PhotosPickerCollectionsController: UIViewController {
     
-    public struct Collection {
+    public struct CollectionInfo {
         var collection: PHAssetCollection
         var title: String?
         var numberOfAssets: Int?
+        var didSelectHandler: (() -> Void)?
         
         struct Thumbnail {
             var asset: PHAsset
             var cachedImage: UIImage?
+            init(asset: PHAsset) {
+                
+                self.asset = asset
+            }
+            mutating func requestImage(result: ((image: UIImage) -> Void)?) {
+
+                if let cachedImage = self.cachedImage {
+                    
+                    result?(image: cachedImage)
+                } else {
+                    PHImageManager.defaultManager().requestImageForAsset(
+                        self.asset,
+                        targetSize: CGSizeMake(100,100),
+                        contentMode: PHImageContentMode.AspectFill,
+                        options: nil,
+                        resultHandler: { (image, info) -> Void in
+                        
+                        self.cachedImage = image
+                        result?(image: image)
+                    })
+                }
+                
+            }
         }
-        var top3Assets: [PHAsset]?
-        var cachedTop3Images: [UIImage]?
-        init(collection: PHAssetCollection) {
+
+        var top3Thumbnails: [Thumbnail]?
+        
+        init(collection: PHAssetCollection, didSelectHandler: (() -> Void)? = nil) {
             
             self.collection = collection
             self.title = collection.localizedTitle
             self.numberOfAssets = collection.estimatedAssetCount
+            self.didSelectHandler = didSelectHandler
             
             let options = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -52,25 +78,23 @@ public class PhotosPickerCollectionsController: UIViewController {
                 
                 self.numberOfAssets = assets.count
                 
-                self.top3Assets = []
+                self.top3Thumbnails = []
                 assets.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
                     
-                    self.top3Assets?.append((asset as! PHAsset))
+                    self.top3Thumbnails?.append(Thumbnail(asset: (asset as! PHAsset)))
                     if index == 2 {
                         
                         stop.memory = true
                     }
                 })
             }
-
         }
-        
+    
     }
 
     public weak var tableView: UITableView?
     public var photoLibrary = PHPhotoLibrary.sharedPhotoLibrary()
-    public var collections: [Collection]?
-    var imageManager = PHImageManager.defaultManager()
+    public var collectionInfos: [CollectionInfo]?
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         
@@ -114,21 +138,37 @@ public class PhotosPickerCollectionsController: UIViewController {
         )
         
         self.tableView?.registerClass(self.cellClass(), forCellReuseIdentifier: "Cell")
-        println(self.tableView)
+        
+        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
         
         if let collections = self.presentCollections() {
             
-            self.collections = []
+            self.collectionInfos = []
             for collection in collections {
                 collection.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
                     
                     if let collection = collection as? PHAssetCollection {
                         
-                        self.collections?.append(Collection(collection: collection))
+                        let collectionInfo = CollectionInfo(collection: collection, didSelectHandler: { [weak self] in
+                            
+                            let options = PHFetchOptions()
+                            options.includeHiddenAssets = false
+                            options.wantsIncrementalChangeDetails = false
+                            
+                            let result = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
+                            self?.pushAssetsController(result)
+                        })
+                        self.collectionInfos?.append(collectionInfo)
                     }
                 })
             }
         }
+    }
+    
+    deinit {
+        
+        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+        self.collectionInfos = nil
     }
     
     public func cellClass() -> PhotosPickerCollectionCell.Type {
@@ -149,24 +189,15 @@ public class PhotosPickerCollectionsController: UIViewController {
         return [smartAlbums, result]
     }
     
-    public class func getTopImage(collection: PHAssetCollection, result: ((image: UIImage) -> Void)?) {
+    /**
+    :param: collection
+    */
+    func pushAssetsController(let fetchResult: PHFetchResult) {
         
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        options.includeHiddenAssets = false
-        options.wantsIncrementalChangeDetails = false
-        
-        if let assets = PHAsset.fetchAssetsInAssetCollection(collection, options: options) {
-                        
-            if let firstAsset = assets.firstObject as? PHAsset {
-                PHImageManager.defaultManager().requestImageForAsset(firstAsset, targetSize: CGSizeMake(100,100), contentMode: PHImageContentMode.AspectFill, options: nil, resultHandler: { (image, info) -> Void in
-                    
-                    result?(image: image)
-                    return
-                })
-            }
-        }
+        let controller = PhotosPickerAssetsController(nibName: nil, bundle: nil)
+        self.navigationController?.pushViewController(controller, animated: true)
     }
+    
 }
 
 extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDataSource {
@@ -178,20 +209,21 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return self.collections?.count ?? 0
+        return self.collectionInfos?.count ?? 0
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerCollectionCell
         
-        if let collection = self.collections?[indexPath.row] {
-            cell.thumbnailImageView?.image = collection.top3Assets?.first
-//            PhotosPickerCollectionsController.getTopImage(collection.collection, result: { [weak cell] (image) -> Void in
-//                
-//                cell?.thumbnailImageView?.image = image
-//                return
-//            })
+        if let collection = self.collectionInfos?[indexPath.row] {
+            var thumbnail = collection.top3Thumbnails?.first
+           
+            thumbnail?.requestImage({ (image) -> Void in
+                
+                cell.thumbnailImageView?.image = image
+                return
+            })
         }
         return cell
     }
@@ -199,6 +231,14 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         return PhotosPickerCollectionCell.heightForRow()
+    }
+    
+    public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let collection = self.collectionInfos?[indexPath.row] {
+
+            collection.didSelectHandler?()
+        }
     }
 }
 

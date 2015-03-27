@@ -26,12 +26,88 @@ import Photos
 
 public class PhotosPickerAssetsController: UIViewController {
 
+    public var collectionView: UICollectionView?
+    public var assets: [PHAsset]? {
+        willSet {
+          
+            self.imageManger.stopCachingImagesForAllAssets()
+        }
+        didSet {
+            
+             self.imageManger.startCachingImagesForAssets(self.assets, targetSize: CGSizeMake(10, 10), contentMode: PHImageContentMode.AspectFill, options: nil)
+        }
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        
+        let collectionView = UICollectionView(frame: CGRect.zeroRect, collectionViewLayout: collectionViewLayout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        self.view.addSubview(collectionView)
+        self.collectionView = collectionView
+        
+        let views = ["collectionView": collectionView]
+        
+        self.view.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "H:|-0-[collectionView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+            )
+        )
+        
+        self.view.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "V:|-0-[collectionView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+            )
+        )
+        
+        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
     }
+    
+    deinit {
+        
+        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+    }
+    
+    private var imageManger = PHCachingImageManager()
+}
 
+extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        
+        return 0
+    }
+    
+    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+     
+        return 0
+    }
+    
+    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        return UICollectionViewCell()
+    }
+    
+    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+}
+
+extension PhotosPickerAssetsController: UICollectionViewDelegateFlowLayout {
+    
+
+}
+
+extension PhotosPickerAssetsController: PHPhotoLibraryChangeObserver {
+    
+    public func photoLibraryDidChange(changeInstance: PHChange!) {
+        
+    }
 }
 
 extension PhotosPickerAssetsController: PhotosPickerProtocol {

@@ -31,12 +31,12 @@ public protocol PhotosPickerProtocol: class {
 /**
 * PhotosPickerController
 */
-public class PhotosPickerController<T: PhotosPickerCollectionsController, U: PhotosPickerAssetsController>: UINavigationController {
+public class PhotosPickerController: UINavigationController {
     
-    private(set) var collectionController: T?
+    private(set) var collectionController: PhotosPickerCollectionsController?
     
     ///
-    var allowsEditing: Bool
+    var allowsEditing: Bool = false
     
     /**
     
@@ -45,21 +45,19 @@ public class PhotosPickerController<T: PhotosPickerCollectionsController, U: Pho
     */
     public init() {
         
-        self.allowsEditing = false
-
-        let controller = T(nibName: nil, bundle: nil)
+        let controller = PhotosPickerCollectionsController(nibName: nil, bundle: nil)
         self.collectionController = controller
         super.init(rootViewController: controller)
     }
     
-    /**
-    
-    
-    :param: collection
-    */
-    func pushAssetsController(let collection: PHCollection) {
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         
-        let controller = U(nibName: nil, bundle: nil)
-        self.pushViewController(controller, animated: true)
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
+
+    public required init(coder aDecoder: NSCoder) {
+        
+        fatalError("init(coder:) has not been implemented")
+    }           
+
 }

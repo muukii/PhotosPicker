@@ -51,6 +51,12 @@ public class PhotosPickerCollectionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func prepareForReuse() {
+        
+        super.prepareForReuse()
+        self.thumbnailImageView?.image = nil
+    }
+    
     public func setup() {
         
         let thumbnailImageView = UIImageView()
