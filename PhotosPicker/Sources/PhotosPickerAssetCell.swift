@@ -26,4 +26,51 @@ import Photos
 
 public class PhotosPickerAssetCell: UICollectionViewCell {
 
+    public weak var thumbnailImageView: UIImageView?
+    
+    public override init(frame: CGRect) {
+        
+        super.init(frame: frame)
+        self.setup()
+    }
+
+    public required init(coder aDecoder: NSCoder) {
+        
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func prepareForReuse() {
+    
+        super.prepareForReuse()
+        self.thumbnailImageView?.image = nil
+    }
+    
+    public func setup() {
+        
+        let thumbnailImageView = UIImageView()
+        thumbnailImageView.contentMode = .ScaleAspectFill
+        thumbnailImageView.clipsToBounds = true
+        thumbnailImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        self.contentView.addSubview(thumbnailImageView)
+        
+        self.thumbnailImageView = thumbnailImageView
+
+        
+        let views = [
+            "thumbnailImageView": thumbnailImageView,
+        ]
+        
+        self.contentView.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "V:|-(0)-[thumbnailImageView]-(0)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+            )
+        )
+        
+        self.contentView.addConstraints(
+            NSLayoutConstraint.constraintsWithVisualFormat(
+                "H:|-(0)-[thumbnailImageView]-(0)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+            )
+        )
+    }
 }

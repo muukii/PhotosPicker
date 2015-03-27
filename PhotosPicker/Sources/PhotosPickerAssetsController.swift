@@ -27,14 +27,38 @@ import Photos
 public class PhotosPickerAssetsController: UIViewController {
 
     public var collectionView: UICollectionView?
-    public var assets: [PHAsset]? {
-        willSet {
-          
-            self.imageManger.stopCachingImagesForAllAssets()
-        }
+//    public var assets: [PHAsset]? {
+//        willSet {
+//          
+//            self.imageManger.stopCachingImagesForAllAssets()
+//        }
+//        didSet {
+//            
+//             self.imageManger.startCachingImagesForAssets(self.assets, targetSize: CGSizeMake(10, 10), contentMode: PHImageContentMode.AspectFill, options: nil)
+//        }
+//    }
+   
+    public typealias DaySection = [NSDate: [PHAsset]]
+    public var assets: [[NSDate: [PHAsset]]]?
+    
+    public var collection: PHCollection? {
         didSet {
             
-             self.imageManger.startCachingImagesForAssets(self.assets, targetSize: CGSizeMake(10, 10), contentMode: PHImageContentMode.AspectFill, options: nil)
+//            var assets = [NSDate: [PHAsset]]()
+//            self.fetchResult?.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
+//                if let asset = asset as? PHAsset {
+//                    if let assetDate = self.dateWithOutTime(asset.creationDate) {
+//                        if var dayAssets = assets[assetDate] {
+//                            dayAssets.append(asset)
+//                            assets[assetDate] = dayAssets
+//                        } else {
+//                            var _assets = [PHAsset]()
+//                            _assets.append(asset)
+//                            assets[assetDate] = _assets
+//                        }
+//                    }
+//                }
+//            })
         }
     }
     
@@ -47,6 +71,8 @@ public class PhotosPickerAssetsController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        collectionView.registerClass(PhotosPickerAssetCell.self, forCellWithReuseIdentifier: "Cell")
         
         self.view.addSubview(collectionView)
         self.collectionView = collectionView
@@ -74,6 +100,14 @@ public class PhotosPickerAssetsController: UIViewController {
     }
     
     private var imageManger = PHCachingImageManager()
+    
+    
+    private func dateWithOutTime(date: NSDate) -> NSDate? {
+        let calendar = NSCalendar.currentCalendar()
+        let units: NSCalendarUnit = NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay
+        let comp: NSDateComponents = calendar.components(units, fromDate: date)
+        return calendar.dateFromComponents(comp)
+    }
 }
 
 extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -90,7 +124,8 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
     
     public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        return UICollectionViewCell()
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerAssetCell
+        return cell
     }
     
     public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

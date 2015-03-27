@@ -186,6 +186,22 @@ public class PhotosPickerCollectionsController: UIViewController {
         }
         let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
 
+        
+        let smartFolder = PHCollectionList.fetchCollectionListsWithType(.MomentList, subtype: .Any, options: nil)
+        println(smartFolder)
+        
+        
+        smartFolder.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            
+            if let collection = collection as? PHAssetCollection {
+                
+                let result = PHCollectionList.fetchMomentListsWithSubtype(PHCollectionListSubtype.MomentListCluster, containingMoment: collection, options: nil)
+                result.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
+                    println(collection)
+                })
+            }
+        }
+
         return [smartAlbums, result]
     }
     
@@ -195,6 +211,7 @@ public class PhotosPickerCollectionsController: UIViewController {
     func pushAssetsController(let fetchResult: PHFetchResult) {
         
         let controller = PhotosPickerAssetsController(nibName: nil, bundle: nil)
+//        controller.fetchResult = fetchResult
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
