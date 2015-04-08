@@ -66,7 +66,6 @@ public class PhotosPickerCollectionsController: UIViewController {
             
             self.collection = collection
             self.title = collection.localizedTitle
-            self.numberOfAssets = collection.estimatedAssetCount
             self.didSelectHandler = didSelectHandler
             
             let options = PHFetchOptions()
@@ -149,14 +148,15 @@ public class PhotosPickerCollectionsController: UIViewController {
                     
                     if let collection = collection as? PHAssetCollection {
                         
-                        let collectionInfo = CollectionInfo(collection: collection, didSelectHandler: { [weak self] in
+                        let collectionInfo = CollectionInfo(collection: collection, didSelectHandler: { [weak self, weak collection] in
                             
                             let options = PHFetchOptions()
                             options.includeHiddenAssets = false
                             options.wantsIncrementalChangeDetails = false
                             
-                            let result = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
-                            self?.pushAssetsController(result)
+                            if let collection = collection {
+                                self?.pushAssetsController(collection)
+                            }
                         })
                         self.collectionInfos?.append(collectionInfo)
                     }
@@ -208,10 +208,14 @@ public class PhotosPickerCollectionsController: UIViewController {
     /**
     :param: collection
     */
-    func pushAssetsController(let fetchResult: PHFetchResult) {
+    func pushAssetsController(let collection: PHAssetCollection) {
         
         let controller = PhotosPickerAssetsController(nibName: nil, bundle: nil)
-//        controller.fetchResult = fetchResult
+        
+        PhotosPickerModel.divideByDay(collection: collection) { [weak controller] assets in
+            
+            controller?.dayAssets = assets
+        }
         self.navigationController?.pushViewController(controller, animated: true)
     }
     

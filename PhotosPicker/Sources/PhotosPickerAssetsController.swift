@@ -27,38 +27,10 @@ import Photos
 public class PhotosPickerAssetsController: UIViewController {
 
     public var collectionView: UICollectionView?
-//    public var assets: [PHAsset]? {
-//        willSet {
-//          
-//            self.imageManger.stopCachingImagesForAllAssets()
-//        }
-//        didSet {
-//            
-//             self.imageManger.startCachingImagesForAssets(self.assets, targetSize: CGSizeMake(10, 10), contentMode: PHImageContentMode.AspectFill, options: nil)
-//        }
-//    }
-   
-    public typealias DaySection = [NSDate: [PHAsset]]
-    public var assets: [[NSDate: [PHAsset]]]?
-    
-    public var collection: PHCollection? {
+    public var dayAssets: [PhotosPickerModel.DayAssets]? {
         didSet {
-            
-//            var assets = [NSDate: [PHAsset]]()
-//            self.fetchResult?.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
-//                if let asset = asset as? PHAsset {
-//                    if let assetDate = self.dateWithOutTime(asset.creationDate) {
-//                        if var dayAssets = assets[assetDate] {
-//                            dayAssets.append(asset)
-//                            assets[assetDate] = dayAssets
-//                        } else {
-//                            var _assets = [PHAsset]()
-//                            _assets.append(asset)
-//                            assets[assetDate] = _assets
-//                        }
-//                    }
-//                }
-//            })
+         
+            self.collectionView?.reloadData()
         }
     }
     
@@ -114,17 +86,26 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
     
     public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         
-        return 0
+        return self.dayAssets?.count ?? 0
     }
     
     public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-     
-        return 0
+        let dayAssets = self.dayAssets?[section]
+        return dayAssets?.assets.count ?? 0
     }
     
     public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerAssetCell
+        let asset = self.dayAssets?[indexPath.section].assets[indexPath.item]
+        self.imageManger.requestImageForAsset(
+            asset,
+            targetSize: CGSizeMake(100,100),
+            contentMode: PHImageContentMode.AspectFill,
+            options: nil,
+            resultHandler: { (image, info) -> Void in
+                cell.thumbnailImageView?.image = image
+        })
         return cell
     }
     
