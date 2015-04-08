@@ -26,11 +26,11 @@ import Photos
 
 public class PhotosPickerCollectionsController: UIViewController {
     
-    public struct CollectionInfo {
+    public class CollectionInfo {
         var collection: PHAssetCollection
         var title: String?
         var numberOfAssets: Int?
-        var didSelectHandler: (() -> Void)?
+        var dayAssetsCollection: [PhotosPickerModel.DayAssets]?
         
         struct Thumbnail {
             var asset: PHAsset
@@ -62,11 +62,10 @@ public class PhotosPickerCollectionsController: UIViewController {
 
         var top3Thumbnails: [Thumbnail]?
         
-        init(collection: PHAssetCollection, didSelectHandler: (() -> Void)? = nil) {
+        init(collection: PHAssetCollection) {
             
             self.collection = collection
             self.title = collection.localizedTitle
-            self.didSelectHandler = didSelectHandler
             
             let options = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -86,6 +85,11 @@ public class PhotosPickerCollectionsController: UIViewController {
                         stop.memory = true
                     }
                 })
+            }
+            
+            PhotosPickerModel.divideByDay(collection: self.collection) { [weak self] dayAssetsCollection in
+               
+                self?.dayAssetsCollection = dayAssetsCollection
             }
         }
     
@@ -148,16 +152,7 @@ public class PhotosPickerCollectionsController: UIViewController {
                     
                     if let collection = collection as? PHAssetCollection {
                         
-                        let collectionInfo = CollectionInfo(collection: collection, didSelectHandler: { [weak self, weak collection] in
-                            
-                            let options = PHFetchOptions()
-                            options.includeHiddenAssets = false
-                            options.wantsIncrementalChangeDetails = false
-                            
-                            if let collection = collection {
-                                self?.pushAssetsController(collection)
-                            }
-                        })
+                        let collectionInfo = CollectionInfo(collection: collection)
                         self.collectionInfos?.append(collectionInfo)
                     }
                 })
@@ -208,13 +203,19 @@ public class PhotosPickerCollectionsController: UIViewController {
     /**
     :param: collection
     */
-    func pushAssetsController(let collection: PHAssetCollection) {
+    func pushAssetsController(let collectionInfo: CollectionInfo) {
         
         let controller = PhotosPickerAssetsController(nibName: nil, bundle: nil)
-        
-        PhotosPickerModel.divideByDay(collection: collection) { [weak controller] assets in
+
+        if let dayAssetsCollection = collectionInfo.dayAssetsCollection {
             
-            controller?.dayAssets = assets
+            controller.dayAssets = dayAssetsCollection
+        } else {
+            
+            PhotosPickerModel.divideByDay(collection: collectionInfo.collection) { [weak controller] assets in
+                
+                controller?.dayAssets = assets
+            }
         }
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -256,9 +257,9 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
     
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let collection = self.collectionInfos?[indexPath.row] {
-
-            collection.didSelectHandler?()
+        if let collectionInfo = self.collectionInfos?[indexPath.row] {
+            
+            self.pushAssetsController(collectionInfo)
         }
     }
 }

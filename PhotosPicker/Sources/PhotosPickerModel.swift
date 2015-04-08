@@ -25,7 +25,6 @@ public class PhotosPickerModel {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
-            
             var dayAssets: [DayAssets] = []
             
             let options = PHFetchOptions()
