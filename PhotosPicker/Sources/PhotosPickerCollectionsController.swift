@@ -28,9 +28,9 @@ public class PhotosPickerCollectionsController: UIViewController {
     
     public class SectionInfo {
         
-        var title: String
-        var items: [ItemInfo]?
-        init(title: String) {
+        public var title: String
+        public var items: [ItemInfo]?
+        public init(title: String) {
             
             self.title = title
         }
@@ -38,12 +38,12 @@ public class PhotosPickerCollectionsController: UIViewController {
     
     public class ItemInfo {
         
-        var title: String
-        var numberOfAssets: Int
-        var selectionHandler: (() -> Void)?
-        var assets: PhotosPickerModel.PhotosAssets?
+        public private(set) var title: String
+        public private(set) var numberOfAssets: Int
+        public private(set) var assets: PhotosPickerModel.PhotosAssets?
+        public var selectionHandler: (() -> Void)?
         
-        init(title: String, numberOfAssets: Int) {
+        public init(title: String, numberOfAssets: Int, assets: PhotosPickerModel.PhotosAssets) {
             
             self.title = title
             self.numberOfAssets = numberOfAssets
@@ -51,79 +51,14 @@ public class PhotosPickerCollectionsController: UIViewController {
         }
     }
     
-    
-    public class CollectionInfo {
-        var collection: PHAssetCollection
-        var title: String?
-        var numberOfAssets: Int?
-        var dayAssetsCollection: PhotosPickerModel.PhotosAssets?
-        
-        struct Thumbnail {
-            var asset: PHAsset
-            var cachedImage: UIImage?
-            init(asset: PHAsset) {
-                
-                self.asset = asset
-            }
-            mutating func requestImage(result: ((image: UIImage) -> Void)?) {
-
-                if let cachedImage = self.cachedImage {
-                    
-                    result?(image: cachedImage)
-                } else {
-                    PHImageManager.defaultManager().requestImageForAsset(
-                        self.asset,
-                        targetSize: CGSizeMake(100,100),
-                        contentMode: PHImageContentMode.AspectFill,
-                        options: nil,
-                        resultHandler: { (image, info) -> Void in
-                        
-                        self.cachedImage = image
-                        result?(image: image)
-                    })
-                }
-                
-            }
-        }
-
-        var top3Thumbnails: [Thumbnail]?
-        
-        init(collection: PHAssetCollection) {
-            
-            self.collection = collection
-            self.title = collection.localizedTitle
-            
-            let options = PHFetchOptions()
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            options.includeHiddenAssets = false
-            options.wantsIncrementalChangeDetails = false
-            
-            if let assets = PHAsset.fetchAssetsInAssetCollection(self.collection, options: options) {
-                
-                self.numberOfAssets = assets.count
-                
-                self.top3Thumbnails = []
-                assets.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
-                    
-                    self.top3Thumbnails?.append(Thumbnail(asset: (asset as! PHAsset)))
-                    if index == 2 {
-                        
-                        stop.memory = true
-                    }
-                })
-            }
-            
-            PhotosPickerModel.divideByDay(collection: self.collection) { [weak self] dayAssetsCollection in
-               
-                self?.dayAssetsCollection = dayAssetsCollection
-            }
-        }
-    
-    }
-
     public weak var tableView: UITableView?
 
-    public var collectionInfos: [CollectionInfo]?
+    public var sectionInfo: [SectionInfo]? {
+        didSet {
+            
+            self.tableView?.reloadData()
+        }
+    }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         
@@ -170,80 +105,16 @@ public class PhotosPickerCollectionsController: UIViewController {
         
         PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
         
-        if let collections = self.presentCollections() {
-            
-            self.collectionInfos = []
-            for collection in collections {
-                collection.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
-                    
-                    if let collection = collection as? PHAssetCollection {
-                        
-                        let collectionInfo = CollectionInfo(collection: collection)
-                        self.collectionInfos?.append(collectionInfo)
-                    }
-                })
-            }
-        }
     }
     
     deinit {
         
         PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
-        self.collectionInfos = nil
     }
     
     public func cellClass() -> PhotosPickerCollectionCell.Type {
         
         return PhotosPickerCollectionCell.self
-    }
-    
-    public func presentCollections() -> [PHFetchResult]? {
-        
-        let result = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
-
-        println(result)
-        result.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
-            println(collection)
-        }
-        let smartAlbums = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
-
-        
-        let smartFolder = PHCollectionList.fetchCollectionListsWithType(.MomentList, subtype: .Any, options: nil)
-        println(smartFolder)
-        
-        
-        smartFolder.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
-            
-            if let collection = collection as? PHAssetCollection {
-                
-                let result = PHCollectionList.fetchMomentListsWithSubtype(PHCollectionListSubtype.MomentListCluster, containingMoment: collection, options: nil)
-                result.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
-                    println(collection)
-                })
-            }
-        }
-
-        return [smartAlbums, result]
-    }
-    
-    /**
-    :param: collection
-    */
-    func pushAssetsController(let collectionInfo: CollectionInfo) {
-        
-        let controller = PhotosPickerAssetsController(nibName: nil, bundle: nil)
-
-        if let dayAssetsCollection = collectionInfo.dayAssetsCollection {
-            
-            controller.dayAssets = dayAssetsCollection
-        } else {
-            
-            PhotosPickerModel.divideByDay(collection: collectionInfo.collection) { [weak controller] assets in
-                
-                controller?.dayAssets = assets
-            }
-        }
-        self.navigationController?.pushViewController(controller, animated: true)
     }
     
 }
@@ -252,27 +123,23 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
     
     public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-        return 1
+        return self.sectionInfo?.count ?? 0
     }
     
     public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return self.collectionInfos?.count ?? 0
+        let items = self.sectionInfo?[section].items
+        return items?.count ?? 0
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerCollectionCell
         
-        if let collection = self.collectionInfos?[indexPath.row] {
-            var thumbnail = collection.top3Thumbnails?.first
-           
-            thumbnail?.requestImage({ (image) -> Void in
-                
-                cell.thumbnailImageView?.image = image
-                return
-            })
+        if let item = self.sectionInfo?[indexPath.section].items?[indexPath.row] {
+            cell.textLabel?.text = item.title
         }
+        
         return cell
     }
     
@@ -283,9 +150,9 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
     
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if let collectionInfo = self.collectionInfos?[indexPath.row] {
+        if let item = self.sectionInfo?[indexPath.section].items?[indexPath.row] {
             
-            self.pushAssetsController(collectionInfo)
+            item.selectionHandler?()
         }
     }
 }

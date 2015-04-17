@@ -23,19 +23,9 @@ public class PhotosPickerModel {
         }
     }
     
-    public var photoLibrary = PHPhotoLibrary.sharedPhotoLibrary()
-    
-    static var sharedInstance = PhotosPickerModel()
-    
-    init() {
+    public class func divideByDay(#collection: PHAssetCollection) -> PhotosAssets {
         
-    }
-    
-    public class func divideByDay(#collection: PHAssetCollection, completion: ([DayPhotoAssets] -> ())?) {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
-            
-            var dayAssets: [DayPhotoAssets] = []
+            var dayAssets: PhotosAssets = PhotosAssets()
             
             let options = PHFetchOptions()
             options.sortDescriptors = [
@@ -69,12 +59,90 @@ public class PhotosPickerModel {
                     
                 }
             })
+        
+        return dayAssets
+    }
+    
+    public class func requestDefaultCollections(result: ([PhotosPickerCollectionsController.ItemInfo] -> Void)?) {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+            
+            // TODO: Refactor
+            
+            var collections: [PHAssetCollection] = []
+            
+            let topLevelUserCollectionsResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+            
+            topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+                
+                if let collection = collection as? PHAssetCollection {
+                    collections.append(collection)
+                }
+//                else if let collectionList = collection as? PHCollectionList {
+//                    
+//                    let result = PHCollection.fetchCollectionsInCollectionList(collectionList, options: nil)
+//                    
+//                    result.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
+//                        
+//                        if let collection = collection as? PHAssetCollection {
+//                            collections.append(collection)
+//                        }
+//                    })
+//                }
+            }
+            
+            let smartAlbumsCollectionResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
+            
+            smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+                
+                if let collection = collection as? PHAssetCollection {
+                    collections.append(collection)
+                }
+//                else if let collectionList = collection as? PHCollectionList {
+//                    let result = PHCollection.fetchCollectionsInCollectionList(collectionList, options: nil)
+//                    
+//                    result.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
+//                        
+//                        if let collection = collection as? PHAssetCollection {
+//                            collections.append(collection)
+//                        }
+//                    })
+//                }
+            }
+            
+            var items: [PhotosPickerCollectionsController.ItemInfo] = []
+            
+            for collection in collections {
+                
+                let result: PhotosAssets = self.divideByDay(collection: collection)
+                let item: PhotosPickerCollectionsController.ItemInfo = PhotosPickerCollectionsController.ItemInfo(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: result)
+                items.append(item)
+            }
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                completion?(dayAssets)
-                return
+
+                result?(items)
             })
+            
         })
+        
+        
+//        let smartFolder = PHCollectionList.fetchCollectionListsWithType(.MomentList, subtype: .Any, options: nil)
+//        println(smartFolder)
+//        
+//        
+//        smartFolder.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+//            
+//            if let collection = collection as? PHAssetCollection {
+//                
+//                let result = PHCollectionList.fetchMomentListsWithSubtype(PHCollectionListSubtype.MomentListCluster, containingMoment: collection, options: nil)
+//                result.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
+//                    println(collection)
+//                })
+//            }
+//        }
+
+        
     }
     
     private class func dateWithOutTime(date: NSDate!) -> NSDate {

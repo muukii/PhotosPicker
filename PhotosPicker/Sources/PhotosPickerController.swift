@@ -68,6 +68,15 @@ extension PHAsset: PhotosAsset {
     }
 }
 
+extension PHAssetCollection {
+    
+    func requestNumberOfAssets() -> Int {
+       
+        let assets = PHAsset.fetchAssetsInAssetCollection(self, options: nil)
+        return assets.count
+    }
+}
+
 public protocol PhotosPickerProtocol: class {
     
 }
@@ -77,7 +86,7 @@ public protocol PhotosPickerProtocol: class {
 */
 public class PhotosPickerController: UINavigationController {
     
-    private(set) var collectionController: PhotosPickerCollectionsController?
+    public private(set) var collectionController: PhotosPickerCollectionsController?
     
     ///
     var allowsEditing: Bool = false
@@ -90,8 +99,8 @@ public class PhotosPickerController: UINavigationController {
     public init() {
         
         let controller = PhotosPickerCollectionsController(nibName: nil, bundle: nil)
-        self.collectionController = controller
         super.init(rootViewController: controller)
+        self.collectionController = controller
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {

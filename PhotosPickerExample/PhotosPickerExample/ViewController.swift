@@ -24,6 +24,17 @@ class ViewController: UIViewController {
         self.presentViewController(controller, animated: true) { () -> Void in
             
         }
+        
+        PhotosPickerModel.requestDefaultCollections { assets in
+            
+            let section = PhotosPickerCollectionsController.SectionInfo(title: "カメラロール")
+            section.items = assets
+            let info: [PhotosPickerCollectionsController.SectionInfo] = [section]
+            controller.collectionController?.sectionInfo = info
+            controller.collectionController?.tableView?.reloadData()
+            
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
