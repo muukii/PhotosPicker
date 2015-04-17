@@ -23,6 +23,50 @@
 import UIKit
 import Foundation
 import Photos
+import CoreLocation
+
+public enum PhotosAssetMediaType: Int {
+    
+    case Unknown
+    case Image
+    case Video
+    case Audio
+}
+
+public protocol PhotosAsset {
+    
+    var photosObjectMediaType: PhotosAssetMediaType { get }
+    var pixelWidth: Int { get }
+    var pixelHeight: Int { get }
+    
+    var creationDate: NSDate! { get }
+    var modificationDate: NSDate! { get }
+    
+    var location: CLLocation! { get }
+    var duration: NSTimeInterval { get }
+    
+    var hidden: Bool { get }
+    var favorite: Bool { get }
+    
+    func requestImage(targetSize: CGSize, result: ((image: UIImage) -> Void)?)
+}
+
+extension PHAsset: PhotosAsset {
+    
+    public var photosObjectMediaType: PhotosAssetMediaType {
+        
+       return PhotosAssetMediaType(rawValue: self.mediaType.rawValue)!
+    }
+    
+    public func requestImage(targetSize: CGSize, result: ((image: UIImage) -> Void)?) {
+        
+        PHImageManager.defaultManager().requestImageForAsset(self, targetSize: targetSize, contentMode: PHImageContentMode.AspectFill, options: nil) { (image, info) -> Void in
+            
+            result?(image: image)
+            return
+        }
+    }
+}
 
 public protocol PhotosPickerProtocol: class {
     

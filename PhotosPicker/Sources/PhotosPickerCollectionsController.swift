@@ -26,11 +26,37 @@ import Photos
 
 public class PhotosPickerCollectionsController: UIViewController {
     
+    public class SectionInfo {
+        
+        var title: String
+        var items: [ItemInfo]?
+        init(title: String) {
+            
+            self.title = title
+        }
+    }
+    
+    public class ItemInfo {
+        
+        var title: String
+        var numberOfAssets: Int
+        var selectionHandler: (() -> Void)?
+        var assets: PhotosPickerModel.PhotosAssets?
+        
+        init(title: String, numberOfAssets: Int) {
+            
+            self.title = title
+            self.numberOfAssets = numberOfAssets
+            
+        }
+    }
+    
+    
     public class CollectionInfo {
         var collection: PHAssetCollection
         var title: String?
         var numberOfAssets: Int?
-        var dayAssetsCollection: [PhotosPickerModel.DayAssets]?
+        var dayAssetsCollection: PhotosPickerModel.PhotosAssets?
         
         struct Thumbnail {
             var asset: PHAsset
@@ -96,7 +122,7 @@ public class PhotosPickerCollectionsController: UIViewController {
     }
 
     public weak var tableView: UITableView?
-    public var photoLibrary = PHPhotoLibrary.sharedPhotoLibrary()
+
     public var collectionInfos: [CollectionInfo]?
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {

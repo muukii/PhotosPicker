@@ -27,7 +27,7 @@ import Photos
 public class PhotosPickerAssetsController: UIViewController {
 
     public var collectionView: UICollectionView?
-    public var dayAssets: [PhotosPickerModel.DayAssets]? {
+    public var dayAssets: PhotosPickerModel.PhotosAssets? {
         didSet {
          
             self.collectionView?.reloadData()
@@ -98,13 +98,10 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerAssetCell
         let asset = self.dayAssets?[indexPath.section].assets[indexPath.item]
-        self.imageManger.requestImageForAsset(
-            asset,
-            targetSize: CGSizeMake(100,100),
-            contentMode: PHImageContentMode.AspectFill,
-            options: nil,
-            resultHandler: { (image, info) -> Void in
-                cell.thumbnailImageView?.image = image
+        
+        asset?.requestImage(CGSizeMake(100, 100), result: { (image) -> Void in
+            
+            cell.thumbnailImageView?.image = image
         })
         return cell
     }

@@ -11,9 +11,11 @@ import Photos
 
 public class PhotosPickerModel {
     
-    public struct DayAssets: Printable {
+    public typealias PhotosAssets = [DayPhotoAssets]
+    
+    public struct DayPhotoAssets: Printable {
         var date = NSDate()
-        var assets = [PHAsset]()
+        var assets = [PhotosAsset]()
         
         public var description: String {
             var string = "\n Date:\(date) \nAssets: \(assets) \n"
@@ -21,11 +23,19 @@ public class PhotosPickerModel {
         }
     }
     
-    public class func divideByDay(#collection: PHAssetCollection, completion: ([DayAssets] -> ())?) {
+    public var photoLibrary = PHPhotoLibrary.sharedPhotoLibrary()
+    
+    static var sharedInstance = PhotosPickerModel()
+    
+    init() {
+        
+    }
+    
+    public class func divideByDay(#collection: PHAssetCollection, completion: ([DayPhotoAssets] -> ())?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
-            var dayAssets: [DayAssets] = []
+            var dayAssets: [DayPhotoAssets] = []
             
             let options = PHFetchOptions()
             options.sortDescriptors = [
@@ -36,7 +46,7 @@ public class PhotosPickerModel {
             options.wantsIncrementalChangeDetails = false
             
             let assets = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
-            var tmpDayAsset: DayAssets!
+            var tmpDayAsset: DayPhotoAssets!
             var processingDate: NSDate!
             assets?.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
                 
@@ -51,7 +61,7 @@ public class PhotosPickerModel {
                     
                     if tmpDayAsset == nil {
                         
-                        tmpDayAsset = DayAssets()
+                        tmpDayAsset = DayPhotoAssets()
                         tmpDayAsset.date = processingDate
                     }
                     
