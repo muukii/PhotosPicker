@@ -12,11 +12,11 @@ import Photos
 public typealias PhotosPickerAssets = [DayPhotosPickerAssets]
 
 public struct DayPhotosPickerAssets: Printable {
-    var date = NSDate()
-    var assets = [PhotosPickerAsset]()
+    var date: NSDate = NSDate()
+    var assets: [PhotosPickerAsset] = []
     
     public var description: String {
-        var string = "\n Date:\(date) \nAssets: \(assets) \n"
+        var string: String = "\n Date:\(date) \nAssets: \(assets) \n"
         return string
     }
 }
@@ -25,40 +25,40 @@ public class PhotosPickerModel {
     
     public class func divideByDay(#collection: PHAssetCollection) -> PhotosPickerAssets {
         
-            var dayAssets: PhotosPickerAssets = PhotosPickerAssets()
+        var dayAssets: PhotosPickerAssets = PhotosPickerAssets()
+        
+        let options: PHFetchOptions = PHFetchOptions()
+        options.sortDescriptors = [
+            //            NSSortDescriptor(key: "modificationDate", ascending: false),
+            NSSortDescriptor(key: "creationDate", ascending: false),
+        ]
+        options.includeHiddenAssets = false
+        options.wantsIncrementalChangeDetails = false
+        
+        let assets: PHFetchResult? = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
+        var tmpDayAsset: DayPhotosPickerAssets!
+        var processingDate: NSDate!
+        assets?.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
             
-            let options = PHFetchOptions()
-            options.sortDescriptors = [
-                //            NSSortDescriptor(key: "modificationDate", ascending: false),
-                NSSortDescriptor(key: "creationDate", ascending: false),
-            ]
-            options.includeHiddenAssets = false
-            options.wantsIncrementalChangeDetails = false
-            
-            let assets = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
-            var tmpDayAsset: DayPhotosPickerAssets!
-            var processingDate: NSDate!
-            assets?.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
+            if let asset = asset as? PHAsset {
                 
-                if let asset = asset as? PHAsset {
+                processingDate = self.dateWithOutTime(asset.creationDate)
+                if tmpDayAsset != nil && processingDate.isEqualToDate(tmpDayAsset!.date) == false {
                     
-                    processingDate = self.dateWithOutTime(asset.creationDate)
-                    if tmpDayAsset != nil && processingDate.isEqualToDate(tmpDayAsset!.date) == false {
-                        
-                        dayAssets.append(tmpDayAsset!)
-                        tmpDayAsset = nil
-                    }
-                    
-                    if tmpDayAsset == nil {
-                        
-                        tmpDayAsset = DayPhotosPickerAssets()
-                        tmpDayAsset.date = processingDate
-                    }
-                    
-                    tmpDayAsset.assets.append(asset)
-                    
+                    dayAssets.append(tmpDayAsset!)
+                    tmpDayAsset = nil
                 }
-            })
+                
+                if tmpDayAsset == nil {
+                    
+                    tmpDayAsset = DayPhotosPickerAssets()
+                    tmpDayAsset.date = processingDate
+                }
+                
+                tmpDayAsset.assets.append(asset)
+                
+            }
+        })
         
         return dayAssets
     }
@@ -71,7 +71,7 @@ public class PhotosPickerModel {
             
             var collections: [PHAssetCollection] = []
             
-            let topLevelUserCollectionsResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+            let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
             
             topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
                 
@@ -91,7 +91,7 @@ public class PhotosPickerModel {
 //                }
             }
             
-            let smartAlbumsCollectionResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
+            let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
             
             smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
                 
@@ -137,9 +137,9 @@ public class PhotosPickerModel {
     
     private class func dateWithOutTime(date: NSDate!) -> NSDate {
         
-        let calendar = NSCalendar.currentCalendar()
-        let units = NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay
-        let comp = calendar.components(units, fromDate: date)
+        let calendar: NSCalendar = NSCalendar.currentCalendar()
+        let units: NSCalendarUnit = NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay
+        let comp: NSDateComponents = calendar.components(units, fromDate: date)
         return calendar.dateFromComponents(comp)!
     }
 }
