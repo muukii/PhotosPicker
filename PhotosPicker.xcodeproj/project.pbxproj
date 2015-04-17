@@ -17,6 +17,8 @@
 		4B1A2BF41ABB332500736F15 /* PhotosPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1A2BF31ABB332500736F15 /* PhotosPickerTests.swift */; };
 		4B5630141AC1D098009AC937 /* PhotosPickerCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */; };
 		4B5630161AC1D0D2009AC937 /* PhotosPickerAssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */; };
+		4BE502581AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */; };
+		4BE5025A1AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */; };
 		4BFCDC671AD53BF1003B2439 /* PhotosPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFCDC661AD53BF1003B2439 /* PhotosPickerModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +46,8 @@
 		4B1A2BF31ABB332500736F15 /* PhotosPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosPickerTests.swift; sourceTree = "<group>"; };
 		4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionCell.swift; sourceTree = "<group>"; };
 		4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerAssetCell.swift; sourceTree = "<group>"; };
+		4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsSection.swift; sourceTree = "<group>"; };
+		4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsItem.swift; sourceTree = "<group>"; };
 		4BFCDC661AD53BF1003B2439 /* PhotosPickerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerModel.swift; sourceTree = "<group>"; };
 		4BFCDC681AD54495003B2439 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,6 +82,8 @@
 				4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */,
 				4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */,
 				4BFCDC661AD53BF1003B2439 /* PhotosPickerModel.swift */,
+				4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */,
+				4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -250,6 +256,8 @@
 				4B0C27F21ABEFE8600F27D51 /* PhotosPickerController.swift in Sources */,
 				4B5630161AC1D0D2009AC937 /* PhotosPickerAssetCell.swift in Sources */,
 				4B0C27F41ABEFED700F27D51 /* PhotosPickerCameraController.swift in Sources */,
+				4BE5025A1AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift in Sources */,
+				4BE502581AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift in Sources */,
 				4B0C27F81ABF18AE00F27D51 /* PhotosPickerAssetsController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

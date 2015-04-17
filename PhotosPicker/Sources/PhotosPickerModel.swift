@@ -9,23 +9,23 @@
 import Foundation
 import Photos
 
+public typealias PhotosPickerAssets = [DayPhotosPickerAssets]
+
+public struct DayPhotosPickerAssets: Printable {
+    var date = NSDate()
+    var assets = [PhotosPickerAsset]()
+    
+    public var description: String {
+        var string = "\n Date:\(date) \nAssets: \(assets) \n"
+        return string
+    }
+}
+
 public class PhotosPickerModel {
     
-    public typealias PhotosAssets = [DayPhotoAssets]
-    
-    public struct DayPhotoAssets: Printable {
-        var date = NSDate()
-        var assets = [PhotosAsset]()
+    public class func divideByDay(#collection: PHAssetCollection) -> PhotosPickerAssets {
         
-        public var description: String {
-            var string = "\n Date:\(date) \nAssets: \(assets) \n"
-            return string
-        }
-    }
-    
-    public class func divideByDay(#collection: PHAssetCollection) -> PhotosAssets {
-        
-            var dayAssets: PhotosAssets = PhotosAssets()
+            var dayAssets: PhotosPickerAssets = PhotosPickerAssets()
             
             let options = PHFetchOptions()
             options.sortDescriptors = [
@@ -36,7 +36,7 @@ public class PhotosPickerModel {
             options.wantsIncrementalChangeDetails = false
             
             let assets = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
-            var tmpDayAsset: DayPhotoAssets!
+            var tmpDayAsset: DayPhotosPickerAssets!
             var processingDate: NSDate!
             assets?.enumerateObjectsUsingBlock({ (asset, index, stop) -> Void in
                 
@@ -51,7 +51,7 @@ public class PhotosPickerModel {
                     
                     if tmpDayAsset == nil {
                         
-                        tmpDayAsset = DayPhotoAssets()
+                        tmpDayAsset = DayPhotosPickerAssets()
                         tmpDayAsset.date = processingDate
                     }
                     
@@ -63,7 +63,7 @@ public class PhotosPickerModel {
         return dayAssets
     }
     
-    public class func requestDefaultCollections(result: ([PhotosPickerCollectionsController.ItemInfo] -> Void)?) {
+    public class func requestDefaultCollections(result: ([PhotosPickerCollectionsItem] -> Void)?) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
             
@@ -110,16 +110,16 @@ public class PhotosPickerModel {
 //                }
             }
             
-            var items: [PhotosPickerCollectionsController.ItemInfo] = []
+            var items: [PhotosPickerCollectionsItem] = []
             
             for collection in collections {
                 
-                let result: PhotosAssets = self.divideByDay(collection: collection)
-                let item: PhotosPickerCollectionsController.ItemInfo = PhotosPickerCollectionsController.ItemInfo(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: result)
-                item.selectionHandler = { (collectionController: PhotosPickerCollectionsController, assets: PhotosAssets) -> Void in
+                let result: PhotosPickerAssets = self.divideByDay(collection: collection)
+                let item: PhotosPickerCollectionsItem = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: result)
+                item.selectionHandler = { (collectionController: PhotosPickerCollectionsController, assets: PhotosPickerAssets) -> Void in
                     
                     let controller2 = PhotosPickerAssetsController()
-                    controller2.dayAssets = assets
+                    controller2.assets = assets
                     collectionController.navigationController?.pushViewController(controller2, animated: true)
                 }
                 items.append(item)
@@ -132,22 +132,6 @@ public class PhotosPickerModel {
             
         })
         
-        
-//        let smartFolder = PHCollectionList.fetchCollectionListsWithType(.MomentList, subtype: .Any, options: nil)
-//        println(smartFolder)
-//        
-//        
-//        smartFolder.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
-//            
-//            if let collection = collection as? PHAssetCollection {
-//                
-//                let result = PHCollectionList.fetchMomentListsWithSubtype(PHCollectionListSubtype.MomentListCluster, containingMoment: collection, options: nil)
-//                result.enumerateObjectsUsingBlock({ (collection, index, stop) -> Void in
-//                    println(collection)
-//                })
-//            }
-//        }
-
         
     }
     

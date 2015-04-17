@@ -26,57 +26,9 @@ import Photos
 
 public class PhotosPickerCollectionsController: UIViewController {
     
-    public class SectionInfo {
-        
-        public var title: String
-        public var items: [ItemInfo]?
-        public init(title: String) {
-            
-            self.title = title
-        }
-    }
-    
-    public class ItemInfo {
-        
-        public private(set) var title: String
-        public private(set) var numberOfAssets: Int
-        public private(set) var assets: PhotosPickerModel.PhotosAssets
-        public var selectionHandler: ((collectionController: PhotosPickerCollectionsController, assets: PhotosPickerModel.PhotosAssets) -> Void)?
-        
-        public func requestTopImage(result: ((image: UIImage?) -> Void)?) {
-            
-            if let image = self.cachedTopImage {
-                
-                result?(image: image)
-                return
-            }
-            
-            if let topAsset: PhotosAsset = self.assets.first?.assets.first {
-                
-                topAsset.requestImage(CGSize(width: 100, height: 100), result: { (image) -> Void in
-                    
-                    self.cachedTopImage = image
-                    result?(image: image)
-                    return
-                })
-            }
-        }
-        
-        public init(title: String, numberOfAssets: Int, assets: PhotosPickerModel.PhotosAssets) {
-            
-            self.title = title
-            self.numberOfAssets = numberOfAssets
-            self.assets = assets
-            
-        }
-        
-        // TODO: Cache
-        private var cachedTopImage: UIImage?
-    }
-    
     public weak var tableView: UITableView?
 
-    public var sectionInfo: [SectionInfo]? {
+    public var sectionInfo: [PhotosPickerCollectionsSection]? {
         didSet {
             
             self.tableView?.reloadData()
@@ -190,8 +142,4 @@ extension PhotosPickerCollectionsController: PHPhotoLibraryChangeObserver {
     public func photoLibraryDidChange(changeInstance: PHChange!) {
         
     }
-}
-
-extension PhotosPickerCollectionsController: PhotosPickerProtocol {
-    
 }

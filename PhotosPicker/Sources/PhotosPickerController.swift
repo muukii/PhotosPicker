@@ -25,7 +25,7 @@ import Foundation
 import Photos
 import CoreLocation
 
-public enum PhotosAssetMediaType: Int {
+public enum PhotosPickerAssetMediaType: Int {
     
     case Unknown
     case Image
@@ -33,9 +33,9 @@ public enum PhotosAssetMediaType: Int {
     case Audio
 }
 
-public protocol PhotosAsset {
+public protocol PhotosPickerAsset {
     
-    var photosObjectMediaType: PhotosAssetMediaType { get }
+    var photosObjectMediaType: PhotosPickerAssetMediaType { get }
     var pixelWidth: Int { get }
     var pixelHeight: Int { get }
     
@@ -51,11 +51,11 @@ public protocol PhotosAsset {
     func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?)
 }
 
-extension PHAsset: PhotosAsset {
+extension PHAsset: PhotosPickerAsset {
     
-    public var photosObjectMediaType: PhotosAssetMediaType {
+    public var photosObjectMediaType: PhotosPickerAssetMediaType {
         
-       return PhotosAssetMediaType(rawValue: self.mediaType.rawValue)!
+       return PhotosPickerAssetMediaType(rawValue: self.mediaType.rawValue)!
     }
     
     public func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?) {
@@ -75,10 +75,6 @@ extension PHAssetCollection {
         let assets = PHAsset.fetchAssetsInAssetCollection(self, options: nil)
         return assets.count
     }
-}
-
-public protocol PhotosPickerProtocol: class {
-    
 }
 
 /**

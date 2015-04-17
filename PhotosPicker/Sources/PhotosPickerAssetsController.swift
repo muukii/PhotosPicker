@@ -27,7 +27,7 @@ import Photos
 public class PhotosPickerAssetsController: UIViewController {
 
     public var collectionView: UICollectionView?
-    public var dayAssets: PhotosPickerModel.PhotosAssets? {
+    public var assets: PhotosPickerAssets? {
         didSet {
          
             self.collectionView?.reloadData()
@@ -70,34 +70,25 @@ public class PhotosPickerAssetsController: UIViewController {
         
         PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
     }
-    
-    private var imageManger = PHCachingImageManager()
-    
-    
-    private func dateWithOutTime(date: NSDate) -> NSDate? {
-        let calendar = NSCalendar.currentCalendar()
-        let units: NSCalendarUnit = NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay
-        let comp: NSDateComponents = calendar.components(units, fromDate: date)
-        return calendar.dateFromComponents(comp)
-    }
+        
 }
 
 extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         
-        return self.dayAssets?.count ?? 0
+        return self.assets?.count ?? 0
     }
     
     public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let dayAssets = self.dayAssets?[section]
+        let dayAssets = self.assets?[section]
         return dayAssets?.assets.count ?? 0
     }
     
     public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerAssetCell
-        let asset = self.dayAssets?[indexPath.section].assets[indexPath.item]
+        let asset = self.assets?[indexPath.section].assets[indexPath.item]
         
         asset?.requestImage(CGSizeMake(100, 100), result: { (image) -> Void in
             
@@ -121,8 +112,4 @@ extension PhotosPickerAssetsController: PHPhotoLibraryChangeObserver {
     public func photoLibraryDidChange(changeInstance: PHChange!) {
         
     }
-}
-
-extension PhotosPickerAssetsController: PhotosPickerProtocol {
-    
 }

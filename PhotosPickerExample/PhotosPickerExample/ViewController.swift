@@ -27,12 +27,10 @@ class ViewController: UIViewController {
         
         PhotosPickerModel.requestDefaultCollections { assets in
             
-            let section = PhotosPickerCollectionsController.SectionInfo(title: "カメラロール")
+            let section = PhotosPickerCollectionsSection(title: "カメラロール")
             section.items = assets
-            let info: [PhotosPickerCollectionsController.SectionInfo] = [section]
-            controller.collectionController?.sectionInfo = info
-            controller.collectionController?.tableView?.reloadData()
-            
+            controller.collectionController?.sectionInfo = [section]
+            controller.collectionController?.tableView?.reloadData()            
         }
         
     }
