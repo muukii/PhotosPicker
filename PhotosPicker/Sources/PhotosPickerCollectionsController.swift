@@ -40,15 +40,38 @@ public class PhotosPickerCollectionsController: UIViewController {
         
         public private(set) var title: String
         public private(set) var numberOfAssets: Int
-        public private(set) var assets: PhotosPickerModel.PhotosAssets?
-        public var selectionHandler: (() -> Void)?
+        public private(set) var assets: PhotosPickerModel.PhotosAssets
+        public var selectionHandler: ((collectionController: PhotosPickerCollectionsController, assets: PhotosPickerModel.PhotosAssets) -> Void)?
+        
+        public func requestTopImage(result: ((image: UIImage?) -> Void)?) {
+            
+            if let image = self.cachedTopImage {
+                
+                result?(image: image)
+                return
+            }
+            
+            if let topAsset: PhotosAsset = self.assets.first?.assets.first {
+                
+                topAsset.requestImage(CGSize(width: 100, height: 100), result: { (image) -> Void in
+                    
+                    self.cachedTopImage = image
+                    result?(image: image)
+                    return
+                })
+            }
+        }
         
         public init(title: String, numberOfAssets: Int, assets: PhotosPickerModel.PhotosAssets) {
             
             self.title = title
             self.numberOfAssets = numberOfAssets
+            self.assets = assets
             
         }
+        
+        // TODO: Cache
+        private var cachedTopImage: UIImage?
     }
     
     public weak var tableView: UITableView?
@@ -137,7 +160,12 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerCollectionCell
         
         if let item = self.sectionInfo?[indexPath.section].items?[indexPath.row] {
-            cell.textLabel?.text = item.title
+
+            cell.collectionTitleLabel?.text = item.title
+            item.requestTopImage({ (image) -> Void in
+                
+                cell.thumbnailImageView?.image = image
+            })
         }
         
         return cell
@@ -152,7 +180,7 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
         
         if let item = self.sectionInfo?[indexPath.section].items?[indexPath.row] {
             
-            item.selectionHandler?()
+            item.selectionHandler?(collectionController: self, assets: item.assets)
         }
     }
 }

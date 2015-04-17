@@ -116,6 +116,12 @@ public class PhotosPickerModel {
                 
                 let result: PhotosAssets = self.divideByDay(collection: collection)
                 let item: PhotosPickerCollectionsController.ItemInfo = PhotosPickerCollectionsController.ItemInfo(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: result)
+                item.selectionHandler = { (collectionController: PhotosPickerCollectionsController, assets: PhotosAssets) -> Void in
+                    
+                    let controller2 = PhotosPickerAssetsController()
+                    controller2.dayAssets = assets
+                    collectionController.navigationController?.pushViewController(controller2, animated: true)
+                }
                 items.append(item)
             }
             

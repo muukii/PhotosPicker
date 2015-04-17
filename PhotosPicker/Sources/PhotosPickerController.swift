@@ -48,7 +48,7 @@ public protocol PhotosAsset {
     var hidden: Bool { get }
     var favorite: Bool { get }
     
-    func requestImage(targetSize: CGSize, result: ((image: UIImage) -> Void)?)
+    func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?)
 }
 
 extension PHAsset: PhotosAsset {
@@ -58,7 +58,7 @@ extension PHAsset: PhotosAsset {
        return PhotosAssetMediaType(rawValue: self.mediaType.rawValue)!
     }
     
-    public func requestImage(targetSize: CGSize, result: ((image: UIImage) -> Void)?) {
+    public func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?) {
         
         PHImageManager.defaultManager().requestImageForAsset(self, targetSize: targetSize, contentMode: PHImageContentMode.AspectFill, options: nil) { (image, info) -> Void in
             
