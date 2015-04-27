@@ -17,6 +17,7 @@
 		4B1A2BF41ABB332500736F15 /* PhotosPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1A2BF31ABB332500736F15 /* PhotosPickerTests.swift */; };
 		4B5630141AC1D098009AC937 /* PhotosPickerCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */; };
 		4B5630161AC1D0D2009AC937 /* PhotosPickerAssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */; };
+		4BAB886D1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BAB886C1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift */; };
 		4BE502581AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */; };
 		4BE5025A1AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */; };
 		4BFCDC671AD53BF1003B2439 /* PhotosPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFCDC661AD53BF1003B2439 /* PhotosPickerModel.swift */; };
@@ -46,6 +47,7 @@
 		4B1A2BF31ABB332500736F15 /* PhotosPickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosPickerTests.swift; sourceTree = "<group>"; };
 		4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionCell.swift; sourceTree = "<group>"; };
 		4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerAssetCell.swift; sourceTree = "<group>"; };
+		4BAB886C1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerBaseViewController.swift; sourceTree = "<group>"; };
 		4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsSection.swift; sourceTree = "<group>"; };
 		4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsItem.swift; sourceTree = "<group>"; };
 		4BFCDC661AD53BF1003B2439 /* PhotosPickerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerModel.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				4B0C27F11ABEFE8600F27D51 /* PhotosPickerController.swift */,
+				4BAB886C1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift */,
 				4B0C27F91ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift */,
 				4B0C27F71ABF18AE00F27D51 /* PhotosPickerAssetsController.swift */,
 				4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */,
@@ -250,6 +253,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BAB886D1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift in Sources */,
 				4B5630141AC1D098009AC937 /* PhotosPickerCollectionCell.swift in Sources */,
 				4BFCDC671AD53BF1003B2439 /* PhotosPickerModel.swift in Sources */,
 				4B0C27FA1ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift in Sources */,

@@ -24,7 +24,7 @@ import UIKit
 import Foundation
 import Photos
 
-public class PhotosPickerAssetsController: UIViewController {
+public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
 
     public var collectionView: UICollectionView?
     public var assets: PhotosPickerAssets? {
@@ -70,7 +70,7 @@ public class PhotosPickerAssetsController: UIViewController {
         
         PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
     }
-        
+    
 }
 
 extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -90,9 +90,9 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerAssetCell
         let asset = self.assets?[indexPath.section].assets[indexPath.item]
         
-        asset?.requestImage(CGSizeMake(100, 100), result: { (image) -> Void in
+        asset?.requestImage(CGSizeMake(100, 100), result: { [weak cell] (image) -> Void in
             
-            cell.thumbnailImageView?.image = image
+            cell?.thumbnailImageView?.image = image
         })
         return cell
     }
@@ -104,7 +104,48 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
 
 extension PhotosPickerAssetsController: UICollectionViewDelegateFlowLayout {
     
-
+    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        
+        return UIEdgeInsetsZero
+    }
+    
+    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+        
+        return 1
+    }
+    
+    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        
+        return 1
+    }
+    
+//    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        
+//    }
+    
+    
+    
+//    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+//        
+//    }
+    
+    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        return self.CalculateFittingGridSize(maxWidth: collectionView.bounds.width, numberOfItemsInRow: 4, margin: 1, index: indexPath.item)
+    }
+    
+    private func CalculateFittingGridSize(#maxWidth: CGFloat, numberOfItemsInRow: Int, margin: CGFloat, index: Int) -> CGSize {
+        let totalMargin: CGFloat = margin * CGFloat(numberOfItemsInRow - 1)
+        let actualWidth: CGFloat = maxWidth - totalMargin
+        let width: CGFloat = CGFloat(floorf(Float(actualWidth) / Float(numberOfItemsInRow)))
+        let extraWidth: CGFloat = actualWidth - (width * CGFloat(numberOfItemsInRow))
+        
+        if index % numberOfItemsInRow == 0 || index % numberOfItemsInRow == (numberOfItemsInRow - 1) {
+            return CGSizeMake(width + extraWidth/2.0,width)
+        } else {
+            return CGSizeMake(width,width)
+        }
+    }
 }
 
 extension PhotosPickerAssetsController: PHPhotoLibraryChangeObserver {

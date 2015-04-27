@@ -24,7 +24,7 @@ import UIKit
 import Foundation
 import Photos
 
-public class PhotosPickerCollectionsController: UIViewController {
+public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
     
     public weak var tableView: UITableView?
 
@@ -92,7 +92,7 @@ public class PhotosPickerCollectionsController: UIViewController {
         return PhotosPickerCollectionCell.self
     }
     
-}
+ }
 
 extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDataSource {
     
