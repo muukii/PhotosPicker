@@ -82,6 +82,16 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         
     }
     
+    public override func viewDidAppear(animated: Bool) {
+        
+        super.viewDidAppear(animated)
+        
+        if let selectedIndexPath = self.tableView?.indexPathForSelectedRow() {
+            
+            self.tableView?.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+        }
+    }
+    
     deinit {
         
         PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
