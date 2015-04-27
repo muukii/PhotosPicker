@@ -85,7 +85,9 @@ public class PhotosPickerController: UINavigationController {
     public private(set) var collectionController: PhotosPickerCollectionsController?
     
     ///
-    var allowsEditing: Bool = false
+    public var allowsEditing: Bool = false
+    public var didFinishPickingAssets: ((controller: PhotosPickerController, assets: [PhotosPickerAsset]) -> Void)?
+    public var didCancel: ((controller: PhotosPickerController) -> Void)?
     
     /**
     

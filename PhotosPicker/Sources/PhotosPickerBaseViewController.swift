@@ -32,6 +32,10 @@ public class PhotosPickerBaseViewController: UIViewController {
     
     private dynamic func handleCloseBarButtonItem(sender: UIBarButtonItem) {
         
+        if let photosPickerController = self.parentViewController as? PhotosPickerController {
+            
+            photosPickerController.didCancel?(controller: photosPickerController)
+        }
     }
 
 }
