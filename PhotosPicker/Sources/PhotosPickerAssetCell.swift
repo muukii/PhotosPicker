@@ -32,6 +32,7 @@ public class PhotosPickerAssetCell: UICollectionViewCell {
         
         super.init(frame: frame)
         self.setup()
+        self.setupSelectedOverlayView()
     }
 
     public required init(coder aDecoder: NSCoder) {
@@ -73,4 +74,32 @@ public class PhotosPickerAssetCell: UICollectionViewCell {
             )
         )
     }
+    
+    public override var selected: Bool {
+        get {
+            
+            return super.selected
+        }
+        set {
+            
+            super.selected = newValue
+            self._selectedOvarlayView?.hidden = !newValue
+        }
+    }
+    
+    public func selectedOverlayView() -> UIView {
+        
+        let imageView = UIImageView(image: UIImage(named: "check.png"))
+        return imageView
+    }
+    
+    private func setupSelectedOverlayView() {
+        
+        let view = self.selectedOverlayView()
+        view.frame = self.bounds
+        self.contentView.addSubview(view)
+        self._selectedOvarlayView = view
+    }
+    
+    private var _selectedOvarlayView: UIView?
 }

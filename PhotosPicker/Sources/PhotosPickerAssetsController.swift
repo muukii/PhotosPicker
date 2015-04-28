@@ -43,6 +43,7 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        collectionView.allowsMultipleSelection = true
         
         collectionView.registerClass(PhotosPickerAssetCell.self, forCellWithReuseIdentifier: "Cell")
         
@@ -90,7 +91,8 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerAssetCell
         let asset = self.assets?[indexPath.section].assets[indexPath.item]
         
-        asset?.requestImage(CGSizeMake(100, 100), result: { [weak cell] (image) -> Void in
+        let size = self.CalculateFittingGridSize(maxWidth: collectionView.bounds.width, numberOfItemsInRow: 4, margin: 1, index: indexPath.item)
+        asset?.requestImage(size, result: { [weak cell] (image) -> Void in
             
             cell?.thumbnailImageView?.image = image
         })
