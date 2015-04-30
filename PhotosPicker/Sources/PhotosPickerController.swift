@@ -21,7 +21,6 @@
 // THE SOFTWARE.
 
 import UIKit
-import Foundation
 import Photos
 import AssetsLibrary
 import CoreLocation
@@ -30,8 +29,6 @@ func AvailablePhotos() -> Bool {
     
     return NSClassFromString("PHAsset") != nil
 }
-
-
 
 public enum PhotosPickerAssetMediaType: Int {
     

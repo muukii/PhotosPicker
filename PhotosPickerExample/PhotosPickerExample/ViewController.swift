@@ -37,10 +37,17 @@ class ViewController: UIViewController {
         
         PhotosPickerController.requestDefaultCollections { assets in
             
-            let section = PhotosPickerCollectionsSection(title: "カメラロール")
-            section.items = assets
-            controller.collectionController?.sectionInfo = [section]
+            let section1 = PhotosPickerCollectionsSection(title: "Muukii's Photo")
+            let item1 = PhotosPickerCollectionsItem(title: "Muukii's Faces", numberOfAssets: 4, assets: PhotosPickerAssetsGroup(assets: [Photo(),Photo(),Photo(),Photo()]))
+            let item2 = PhotosPickerCollectionsItem(title: "Muukii's Hands", numberOfAssets: 4, assets: PhotosPickerAssetsGroup(assets: [Photo(),Photo(),Photo(),Photo()]))
+            section1.items = [item1, item2]
+
+            let section2 = PhotosPickerCollectionsSection(title: "カメラロール")
+            section2.items = assets
+            controller.collectionController?.sectionInfo = [section1, section2]
             controller.collectionController?.tableView?.reloadData()
+            
+            
         }
         
         controller.didCancel = { picker in
