@@ -13,8 +13,13 @@ public class PhotosPickerCollectionsItem {
     
     public private(set) var title: String
     public private(set) var numberOfAssets: Int
-    public private(set) var assets:PhotosPickerAssets
-    public var selectionHandler: ((collectionController: PhotosPickerCollectionsController, assets: PhotosPickerAssets) -> Void)?
+    public private(set) var assets: PhotosPickerAssets
+    public private(set) var dividedAssets: DividedDayPhotosPickerAssets?
+    public var selectionHandler: ((collectionController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void)?
+    
+    public func requestDividedAssets() {
+        
+    }
     
     public func requestTopImage(result: ((image: UIImage?) -> Void)?) {
         
@@ -24,7 +29,7 @@ public class PhotosPickerCollectionsItem {
             return
         }
         
-        if let topAsset: PhotosPickerAsset = self.assets.first?.assets.first {
+        if let topAsset: PhotosPickerAsset = self.dividedAssets?.first?.assets.first {
             
             topAsset.requestImage(CGSize(width: 100, height: 100), result: { (image) -> Void in
                 

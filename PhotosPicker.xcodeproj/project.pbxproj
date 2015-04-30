@@ -21,7 +21,6 @@
 		4BAB886D1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BAB886C1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift */; };
 		4BE502581AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */; };
 		4BE5025A1AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */; };
-		4BFCDC671AD53BF1003B2439 /* PhotosPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFCDC661AD53BF1003B2439 /* PhotosPickerModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +51,6 @@
 		4BAB886C1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerBaseViewController.swift; sourceTree = "<group>"; };
 		4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsSection.swift; sourceTree = "<group>"; };
 		4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsItem.swift; sourceTree = "<group>"; };
-		4BFCDC661AD53BF1003B2439 /* PhotosPickerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerModel.swift; sourceTree = "<group>"; };
 		4BFCDC681AD54495003B2439 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,7 +84,6 @@
 				4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */,
 				4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */,
 				4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */,
-				4BFCDC661AD53BF1003B2439 /* PhotosPickerModel.swift */,
 				4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */,
 				4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */,
 			);
@@ -267,7 +264,6 @@
 			files = (
 				4BAB886D1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift in Sources */,
 				4B5630141AC1D098009AC937 /* PhotosPickerCollectionCell.swift in Sources */,
-				4BFCDC671AD53BF1003B2439 /* PhotosPickerModel.swift in Sources */,
 				4B0C27FA1ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift in Sources */,
 				4B0C27F21ABEFE8600F27D51 /* PhotosPickerController.swift in Sources */,
 				4B5630161AC1D0D2009AC937 /* PhotosPickerAssetCell.swift in Sources */,
@@ -396,6 +392,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = PhotosPicker/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -413,6 +410,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = PhotosPicker/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

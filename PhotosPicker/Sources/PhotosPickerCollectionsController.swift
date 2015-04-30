@@ -58,6 +58,7 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        tableView.tableFooterView = UIView()
         
         self.view.addSubview(tableView)
         self.tableView = tableView
@@ -78,7 +79,9 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         
         self.tableView?.registerClass(self.cellClass(), forCellReuseIdentifier: "Cell")
         
-        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+        if AvailablePhotos() {
+            PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+        }
         
     }
     
@@ -94,7 +97,10 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
     
     deinit {
         
-        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+        if AvailablePhotos() {
+            
+            PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+        }
     }
     
     public func cellClass() -> PhotosPickerCollectionCell.Type {
@@ -121,16 +127,18 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
         
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerCollectionCell
         
-        if let item = self.sectionInfo?[indexPath.section].items?[indexPath.row] {
-
-            cell.collectionTitleLabel?.text = item.title
-            item.requestTopImage({ (image) -> Void in
-                
-                cell.thumbnailImageView?.image = image
-            })
-        }
+        cell.item = self.sectionInfo?[indexPath.section].items?[indexPath.row]
         
         return cell
+    }
+    
+    public func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if cell.respondsToSelector("preservesSuperviewLayoutMargins") {
+            cell.preservesSuperviewLayoutMargins = false
+            cell.layoutMargins = UIEdgeInsetsZero
+        }
+        cell.separatorInset = UIEdgeInsetsZero
     }
     
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -142,7 +150,7 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
         
         if let item = self.sectionInfo?[indexPath.section].items?[indexPath.row] {
             
-            item.selectionHandler?(collectionController: self, assets: item.assets)
+            item.selectionHandler?(collectionController: self, item: item)
         }
     }
 }

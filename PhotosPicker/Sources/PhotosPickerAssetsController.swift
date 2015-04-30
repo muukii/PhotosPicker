@@ -27,7 +27,7 @@ import Photos
 public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
 
     public var collectionView: UICollectionView?
-    public var assets: PhotosPickerAssets? {
+    public var dividedAssets: DividedDayPhotosPickerAssets? {
         didSet {
          
             self.collectionView?.reloadData()
@@ -78,18 +78,18 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
     
     public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         
-        return self.assets?.count ?? 0
+        return self.dividedAssets?.count ?? 0
     }
     
     public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let dayAssets = self.assets?[section]
+        let dayAssets = self.dividedAssets?[section]
         return dayAssets?.assets.count ?? 0
     }
     
     public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! PhotosPickerAssetCell
-        let asset = self.assets?[indexPath.section].assets[indexPath.item]
+        let asset = self.dividedAssets?[indexPath.section].assets[indexPath.item]
         
         let size = self.CalculateFittingGridSize(maxWidth: collectionView.bounds.width, numberOfItemsInRow: 4, margin: 1, index: indexPath.item)
         asset?.requestImage(size, result: { [weak cell] (image) -> Void in

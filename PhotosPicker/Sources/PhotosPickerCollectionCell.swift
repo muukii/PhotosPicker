@@ -21,24 +21,51 @@
 // THE SOFTWARE.
 
 import UIKit
-import Foundation
-import Photos
 
 public class PhotosPickerCollectionCell: UITableViewCell {
     
     public weak var thumbnailImageView: UIImageView?
     public weak var collectionTitleLabel: UILabel?
     
-    public var collection: PHAssetCollection? {
+    public var item: PhotosPickerCollectionsItem? {
         get {
             
-            return _collection
+            return _item
         }
         set {
             
-            
+            _item = newValue
+            if let item = newValue {
+                
+                let attributedString1 = NSAttributedString(
+                    string: item.title,
+                    attributes: [
+                        NSFontAttributeName: UIFont.boldSystemFontOfSize(16),
+                        NSForegroundColorAttributeName: UIColor.blackColor(),
+                    ]
+                )
+                
+                let attributedString2 = NSAttributedString(
+                    string: " (\(item.numberOfAssets))",
+                    attributes: [
+                        NSFontAttributeName: UIFont.systemFontOfSize(16),
+                        NSForegroundColorAttributeName: UIColor.darkGrayColor(),
+                    ]
+                )
+                
+                let mutableAttributedString = NSMutableAttributedString()
+                mutableAttributedString.appendAttributedString(attributedString1)
+                mutableAttributedString.appendAttributedString(attributedString2)
+                
+                self.collectionTitleLabel?.attributedText = mutableAttributedString
+                item.requestTopImage({ (image) -> Void in
+                    
+                    self.thumbnailImageView?.image = image
+                })
+            }
         }
     }
+
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     
@@ -93,7 +120,7 @@ public class PhotosPickerCollectionCell: UITableViewCell {
         
         self.contentView.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "V:|-(>=10)-[collectionTitleLabel]-(>=10)-|", options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views
+                "V:|-[collectionTitleLabel]-|", options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views
             )
         )
         
@@ -104,6 +131,6 @@ public class PhotosPickerCollectionCell: UITableViewCell {
         return 70.0
     }
     
-    private var _collection: PHAssetCollection?
+    private var _item: PhotosPickerCollectionsItem?
 }
 

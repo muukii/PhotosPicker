@@ -25,7 +25,7 @@ class ViewController: UIViewController {
             
         }
         
-        PhotosPickerModel.requestDefaultCollections { assets in
+        PhotosPickerController.requestDefaultCollections { assets in
             
             let section = PhotosPickerCollectionsSection(title: "カメラロール")
             section.items = assets
