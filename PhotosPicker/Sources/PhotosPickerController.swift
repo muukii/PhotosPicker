@@ -47,11 +47,63 @@ extension PHAssetCollection {
     }
 }
 
+public enum PhotosPickerAuthorizationStatus : Int {
+    
+    case NotDetermined // User has not yet made a choice with regards to this application
+    case Restricted // This application is not authorized to access photo data.
+    // The user cannot change this application’s status, possibly due to active restrictions
+    //   such as parental controls being in place.
+    case Denied // User has explicitly denied this application access to photos data.
+    case Authorized // User has authorized this application to access photos data.
+}
+
 /**
 * PhotosPickerController
 */
 public class PhotosPickerController: UINavigationController {
+        
+    public class var authorizationStatus: PhotosPickerAuthorizationStatus {
+        
+        if AvailablePhotos() {
+            
+            return PhotosPickerAuthorizationStatus(rawValue:  PHPhotoLibrary.authorizationStatus().rawValue)!
+        } else {
+            
+            return PhotosPickerAuthorizationStatus(rawValue: ALAssetsLibrary.authorizationStatus().rawValue)!
+        }
+    }
     
+    public class func requestAuthorization(handler: ((PhotosPickerAuthorizationStatus) -> Void)?) {
+        
+        if AvailablePhotos() {
+            
+            PHPhotoLibrary.requestAuthorization({ (status) -> Void in
+                let status = PhotosPickerAuthorizationStatus(rawValue: status.rawValue)!
+                handler?(status)
+            })
+        } else {
+            
+            // TODO:
+        }
+    }
+    
+    public class func startPreheating() {
+        
+        Static.observer.startObserving()
+        Static.observer.didChange = {
+            
+            Static.defaultItems = nil
+            self.requestDefaultCollections(nil)
+        }
+        
+        self.requestDefaultCollections(nil)
+    }
+    
+    public class func endPreheating() {
+        
+        Static.observer.endObserving()
+    }
+
     public private(set) var collectionController: PhotosPickerCollectionsController?
     
     ///
@@ -82,6 +134,12 @@ public class PhotosPickerController: UINavigationController {
     
     
     public class func requestDefaultCollections(result: ([PhotosPickerCollectionsItem] -> Void)?) {
+        
+        if let cachedItems = Static.defaultItems {
+            
+            result?(cachedItems)
+        }
+    
         
         if AvailablePhotos() {
             
@@ -134,6 +192,8 @@ public class PhotosPickerController: UINavigationController {
                     
                 }
                 
+                Static.defaultItems = items
+                
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     
                     result?(items)
@@ -146,6 +206,59 @@ public class PhotosPickerController: UINavigationController {
         }
     }
     
+    struct Static {
+        
+        static var defaultItems: [PhotosPickerCollectionsItem]?
+        static var observer = PhotosPickerLibraryObserver()
+    }
+    
+}
+
+
+class PhotosPickerLibraryObserver: NSObject {
+    
+    var didChange: (() -> Void)?
+    
+    private(set) var isObserving: Bool = false
+    
+    func startObserving() {
+        
+        self.isObserving = true
+        
+        if AvailablePhotos() {
+            
+            PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+        } else {
+            
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "assetsLibraryDidChange:", name: ALAssetsLibraryChangedNotification, object: nil)
+        }
+    }
+    
+    func endObserving() {
+        
+        self.isObserving = false
+        
+        if AvailablePhotos() {
+            
+            PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+        } else {
+            
+        }
+    }
+    
+    private dynamic func assetsLibraryDidChange(notification: NSNotification) {
+                
+        self.didChange?()
+    }
+}
+
+extension PhotosPickerLibraryObserver: PHPhotoLibraryChangeObserver {
+    
+    func photoLibraryDidChange(changeInstance: PHChange!) {
+        
+        // temp
+        self.didChange?()
+    }
 }
 
 
