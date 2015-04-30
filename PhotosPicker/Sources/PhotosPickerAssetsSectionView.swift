@@ -1,4 +1,4 @@
-// PhotosPickerCollectionsSectionView.swift
+// PhotosPickerAssetsSectionView
 //
 // Copyright (c) 2015 muukii
 //
@@ -22,14 +22,7 @@
 
 import UIKit
 
-public class PhotosPickerCollectionsSectionView: UITableViewHeaderFooterView {
-    
-    override init(reuseIdentifier: String?) {
-        
-        super.init(reuseIdentifier: reuseIdentifier)
-        self.setup()
-        self.setAppearance()
-    }
+public class PhotosPickerAssetsSectionView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         
@@ -42,35 +35,42 @@ public class PhotosPickerCollectionsSectionView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public class func heightForSection() -> CGFloat {
-        
-        return 30.0
+    public class func sizeForSection(#collectionView: UICollectionView) -> CGSize {
+
+        return CGSize(width: collectionView.bounds.width, height: 30)
     }
     
     public weak var sectionTitleLabel: UILabel?
-
-    public var section: PhotosPickerCollectionsSection? {
+    public var section: DayPhotosPickerAssets? {
         get {
-
+            
             return _section
         }
         set {
             
             _section = newValue
             if let section = newValue {
-                
-                self.sectionTitleLabel?.text = section.title
+                struct Static {
+                    static var formatter: NSDateFormatter = {
+                        let formatter = NSDateFormatter()
+                        formatter.dateStyle = NSDateFormatterStyle.ShortStyle
+                        return formatter
+                    }()
+                }
+
+                self.sectionTitleLabel?.text = Static.formatter.stringFromDate(section.date)
             }
         }
     }
-    
+
+
     public func setup() {
-    
+        
         let sectionTitleLabel = UILabel()
         sectionTitleLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        self.contentView.addSubview(sectionTitleLabel)
-        self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(sectionTitleLabel)
+        self.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.sectionTitleLabel = sectionTitleLabel
         
@@ -78,13 +78,13 @@ public class PhotosPickerCollectionsSectionView: UITableViewHeaderFooterView {
             "sectionTitleLabel": sectionTitleLabel
         ]
         
-        self.contentView.addConstraints(
+        self.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
                 "|-(10)-[sectionTitleLabel]-(10)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
             )
         )
         
-        self.contentView.addConstraints(
+        self.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
                 "V:|-[sectionTitleLabel]-|", options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: views
             )
@@ -93,9 +93,9 @@ public class PhotosPickerCollectionsSectionView: UITableViewHeaderFooterView {
     
     public func setAppearance() {
         
-        self.sectionTitleLabel?.font = UIFont.systemFontOfSize(14)
+        self.backgroundColor = UIColor.whiteColor()
     }
     
+    private var _section: DayPhotosPickerAssets?
 
-    private var _section: PhotosPickerCollectionsSection?
 }

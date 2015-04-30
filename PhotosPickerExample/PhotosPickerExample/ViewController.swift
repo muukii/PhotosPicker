@@ -20,6 +20,16 @@ class ViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         
         super.viewDidAppear(animated)
+
+        
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    @IBAction func handleButton(sender: AnyObject) {
         let controller = PhotosPickerController()
         self.presentViewController(controller, animated: true) { () -> Void in
             
@@ -30,16 +40,14 @@ class ViewController: UIViewController {
             let section = PhotosPickerCollectionsSection(title: "カメラロール")
             section.items = assets
             controller.collectionController?.sectionInfo = [section]
-            controller.collectionController?.tableView?.reloadData()            
+            controller.collectionController?.tableView?.reloadData()
         }
         
+        controller.didCancel = { picker in
+            
+            picker.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 

@@ -57,8 +57,10 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
         collectionView.dataSource = self
         collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
         collectionView.allowsMultipleSelection = true
+        collectionView.alwaysBounceVertical = true
         
         collectionView.registerClass(PhotosPickerAssetCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.registerClass(PhotosPickerAssetsSectionView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Section")
         
         self.view.addSubview(collectionView)
         self.collectionView = collectionView
@@ -135,10 +137,22 @@ extension PhotosPickerAssetsController: UICollectionViewDelegateFlowLayout {
         return 1
     }
     
-//    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        
-//    }
+    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        
+        return PhotosPickerAssetsSectionView.sizeForSection(collectionView: collectionView)
+    }
     
+    
+    public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        
+        if kind == UICollectionElementKindSectionHeader {
+            
+            let view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "Section", forIndexPath: indexPath) as! PhotosPickerAssetsSectionView
+            view.section = self.dividedAssets?[indexPath.section]
+            return view
+        }
+        return UICollectionReusableView()
+    }
     
     
 //    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {

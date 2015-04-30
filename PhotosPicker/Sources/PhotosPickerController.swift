@@ -86,61 +86,67 @@ public class PhotosPickerController: UINavigationController {
     
     public class func requestDefaultCollections(result: ([PhotosPickerCollectionsItem] -> Void)?) {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+        if AvailablePhotos() {
             
-            // TODO: Refactor
-            
-            var collections: [PHAssetCollection] = []
-            
-            let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
-            
-            topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
                 
-                if let collection = collection as? PHAssetCollection {
-                    collections.insert(collection, atIndex: 0)
-                }
-            }
-            
-            let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
-            
-            smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+                // TODO: Refactor
                 
-                if let collection = collection as? PHAssetCollection {
-                    collections.insert(collection, atIndex: 0)
-                }
-            }
-            
-            var items: [PhotosPickerCollectionsItem] = []
-            
-            for collection: PHAssetCollection in collections {
+                var collections: [PHAssetCollection] = []
                 
-                let options: PHFetchOptions = PHFetchOptions()
-                options.sortDescriptors = [
-                    NSSortDescriptor(key: "creationDate", ascending: false),
-                ]
-                options.includeHiddenAssets = false
-                options.wantsIncrementalChangeDetails = false
+                let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
                 
-                let _assets = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
-                
-                let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: _assets)
-                
-                item.selectionHandler = { (collectionController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void in
+                topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
                     
-                    let controller2 = PhotosPickerAssetsController()
-                    controller2.item = item
-                    collectionController.navigationController?.pushViewController(controller2, animated: true)
+                    if let collection = collection as? PHAssetCollection {
+                        collections.insert(collection, atIndex: 0)
+                    }
                 }
-                items.append(item)
-                                
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
-                result?(items)
+                let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
+                
+                smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+                    
+                    if let collection = collection as? PHAssetCollection {
+                        collections.insert(collection, atIndex: 0)
+                    }
+                }
+                
+                var items: [PhotosPickerCollectionsItem] = []
+                
+                for collection: PHAssetCollection in collections {
+                    
+                    let options: PHFetchOptions = PHFetchOptions()
+                    options.sortDescriptors = [
+                        NSSortDescriptor(key: "creationDate", ascending: false),
+                    ]
+                    options.includeHiddenAssets = false
+                    options.wantsIncrementalChangeDetails = false
+                    
+                    let _assets = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
+                    
+                    let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: _assets)
+                    
+                    item.selectionHandler = { (collectionController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void in
+                        
+                        let controller2 = PhotosPickerAssetsController()
+                        controller2.item = item
+                        collectionController.navigationController?.pushViewController(controller2, animated: true)
+                    }
+                    items.append(item)
+                    
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    result?(items)
+                })
+                
             })
+        } else {
             
-        })
+            
+        }
     }
     
 }

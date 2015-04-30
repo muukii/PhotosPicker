@@ -118,10 +118,10 @@ public typealias DividedDayPhotosPickerAssets = [DayPhotosPickerAssets]
 
 public struct DayPhotosPickerAssets: Printable {
     
-    var date: NSDate
-    var assets: [PhotosPickerAsset] = []
+    public var date: NSDate
+    public var assets: [PhotosPickerAsset] = []
     
-    init(date: NSDate, assets: [PhotosPickerAsset] = []) {
+    public init(date: NSDate, assets: [PhotosPickerAsset] = []) {
         
         self.date = date
         self.assets = assets
