@@ -10,7 +10,7 @@ import Foundation
 import CoreLocation
 import PhotosPicker
 
-class Photo: PhotosPickerAsset {
+class Photo: NSObject, PhotosPickerAsset {
     
     var photosObjectMediaType: PhotosPickerAssetMediaType {
         
