@@ -13,7 +13,7 @@ public class PhotosPickerCollectionsItem {
     
     public private(set) var title: String
     public private(set) var numberOfAssets: Int
-    public var assets: PhotosPickerAssets? {
+    public var assets: PhotosPickerAssets {
         didSet {
             
             self.cachedDividedAssets = nil
@@ -31,6 +31,11 @@ public class PhotosPickerCollectionsItem {
             return
         }
         
+        self.assets.requestDividedAssets { (dividedAssets) -> Void in
+            
+            self.cachedDividedAssets = dividedAssets
+            result?(dividedAssets: dividedAssets)
+        }
         
     }
     
@@ -58,7 +63,7 @@ public class PhotosPickerCollectionsItem {
         
     }
     
-    public init(title: String, numberOfAssets: Int, assets: PhotosPickerAssets? = nil) {
+    public init(title: String, numberOfAssets: Int, assets: PhotosPickerAssets) {
         
         self.title = title
         self.numberOfAssets = numberOfAssets

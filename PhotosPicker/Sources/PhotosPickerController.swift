@@ -69,7 +69,15 @@ extension PHFetchResult: PhotosPickerAssets {
     
     public func requestDividedAssets(result: ((dividedAssets: DividedDayPhotosPickerAssets) -> Void)?) {
         
-        result?(dividedAssets: PhotosPickerController.divideByDay(dateSortedAssets: self))
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            
+            let dividedAssets = PhotosPickerController.divideByDay(dateSortedAssets: self)
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                result?(dividedAssets: dividedAssets)
+            })
+        })
     }
     
     public func enumerateAssetsUsingBlock(block: ((asset: PhotosPickerAsset) -> Void)?) {
@@ -88,7 +96,15 @@ extension ALAssetsGroup: PhotosPickerAssets {
     
     public func requestDividedAssets(result: ((dividedAssets: DividedDayPhotosPickerAssets) -> Void)?) {
         
-        result?(dividedAssets: PhotosPickerController.divideByDay(dateSortedAssets: self))
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            
+            let dividedAssets = PhotosPickerController.divideByDay(dateSortedAssets: self)
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                result?(dividedAssets: dividedAssets)
+            })
+        })
     }
     
     public func enumerateAssetsUsingBlock(block: ((asset: PhotosPickerAsset) -> Void)?) {
@@ -111,7 +127,15 @@ public class PhotosPickerAssetsGroup: PhotosPickerAssets {
     
     public func requestDividedAssets(result: ((dividedAssets: DividedDayPhotosPickerAssets) -> Void)?) {
         
-        result?(dividedAssets: PhotosPickerController.divideByDay(dateSortedAssets: self))
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            
+            let dividedAssets = PhotosPickerController.divideByDay(dateSortedAssets: self)
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                result?(dividedAssets: dividedAssets)
+            })
+        })
     }
   
     public func enumerateAssetsUsingBlock(block: ((asset: PhotosPickerAsset) -> Void)?) {
@@ -236,8 +260,7 @@ public class PhotosPickerController: UINavigationController {
     public var didCancel: ((controller: PhotosPickerController) -> Void)?
     
     /**
-    
-    
+        
     :returns:
     */
     public init() {
@@ -271,7 +294,7 @@ public class PhotosPickerController: UINavigationController {
             topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
                 
                 if let collection = collection as? PHAssetCollection {
-                    collections.append(collection)
+                    collections.insert(collection, atIndex: 0)
                 }
             }
             
@@ -280,7 +303,7 @@ public class PhotosPickerController: UINavigationController {
             smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
                 
                 if let collection = collection as? PHAssetCollection {
-                    collections.append(collection)
+                    collections.insert(collection, atIndex: 0)
                 }
             }
             
@@ -290,7 +313,6 @@ public class PhotosPickerController: UINavigationController {
                 
                 let options: PHFetchOptions = PHFetchOptions()
                 options.sortDescriptors = [
-                    //            NSSortDescriptor(key: "modificationDate", ascending: false),
                     NSSortDescriptor(key: "creationDate", ascending: false),
                 ]
                 options.includeHiddenAssets = false
@@ -298,7 +320,7 @@ public class PhotosPickerController: UINavigationController {
                 
                 let _assets = PHAsset.fetchAssetsInAssetCollection(collection, options: options)
                 
-                let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets())
+                let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: _assets)
                 
                 item.selectionHandler = { (collectionController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void in
                     
@@ -316,8 +338,6 @@ public class PhotosPickerController: UINavigationController {
             })
             
         })
-        
-        
     }
     
     public class func divideByDay(#dateSortedAssets: PhotosPickerAssets) -> DividedDayPhotosPickerAssets {
