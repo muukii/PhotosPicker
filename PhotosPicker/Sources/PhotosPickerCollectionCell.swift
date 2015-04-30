@@ -24,6 +24,23 @@ import UIKit
 
 public class PhotosPickerCollectionCell: UITableViewCell {
     
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.setup()
+        self.setAppearance()
+    }
+    
+    public required init(coder aDecoder: NSCoder) {
+        
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public class func heightForRow() -> CGFloat {
+        
+        return 70.0
+    }
+    
     public weak var thumbnailImageView: UIImageView?
     public weak var collectionTitleLabel: UILabel?
     
@@ -64,18 +81,6 @@ public class PhotosPickerCollectionCell: UITableViewCell {
                 })
             }
         }
-    }
-
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-    
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.setup()
-    }
-
-    public required init(coder aDecoder: NSCoder) {
-        
-        fatalError("init(coder:) has not been implemented")
     }
     
     public override func prepareForReuse() {
@@ -126,9 +131,8 @@ public class PhotosPickerCollectionCell: UITableViewCell {
         
     }
     
-    public class func heightForRow() -> CGFloat {
+    public func setAppearance() {
         
-        return 70.0
     }
     
     private var _item: PhotosPickerCollectionsItem?

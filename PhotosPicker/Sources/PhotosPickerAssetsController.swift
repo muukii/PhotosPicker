@@ -112,6 +112,7 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
         return cell
     }
     
+        
     public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
     }

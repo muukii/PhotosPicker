@@ -78,6 +78,7 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         )
         
         self.tableView?.registerClass(self.cellClass(), forCellReuseIdentifier: "Cell")
+        self.tableView?.registerClass(self.sectionClass(), forHeaderFooterViewReuseIdentifier: "Section")
         
         if AvailablePhotos() {
             PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
@@ -106,6 +107,11 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
     public func cellClass() -> PhotosPickerCollectionCell.Type {
         
         return PhotosPickerCollectionCell.self
+    }
+    
+    public func sectionClass() -> PhotosPickerCollectionsSectionView.Type {
+        
+        return PhotosPickerCollectionsSectionView.self
     }
     
  }
@@ -144,6 +150,18 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
     public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         return PhotosPickerCollectionCell.heightForRow()
+    }
+    
+    public func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        return PhotosPickerCollectionsSectionView.heightForSection()
+    }
+    
+    public func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier("Section") as! PhotosPickerCollectionsSectionView
+        view.section = self.sectionInfo?[section]
+        return view
     }
     
     public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

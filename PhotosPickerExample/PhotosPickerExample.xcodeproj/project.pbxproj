@@ -15,6 +15,7 @@
 		4B0C27E31ABEFDA600F27D51 /* PhotosPickerExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C27E21ABEFDA600F27D51 /* PhotosPickerExampleTests.swift */; };
 		4B0C27ED1ABEFDEF00F27D51 /* PhotosPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0C27EC1ABEFDEF00F27D51 /* PhotosPicker.framework */; };
 		4B0C27EE1ABEFDEF00F27D51 /* PhotosPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0C27EC1ABEFDEF00F27D51 /* PhotosPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4B64CE261AF25FDC003131E3 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64CE251AF25FDC003131E3 /* Photo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		4B0C27E11ABEFDA600F27D51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B0C27E21ABEFDA600F27D51 /* PhotosPickerExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosPickerExampleTests.swift; sourceTree = "<group>"; };
 		4B0C27EC1ABEFDEF00F27D51 /* PhotosPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = PhotosPicker.framework; path = "/Users/Muukii/Library/Developer/Xcode/DerivedData/PhotosPicker-cabaiwfdpvwhdhcfkftgeuvsoqzd/Build/Products/Debug-iphoneos/PhotosPicker.framework"; sourceTree = "<absolute>"; };
+		4B64CE251AF25FDC003131E3 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		4B0C27C91ABEFDA600F27D51 /* PhotosPickerExample */ = {
 			isa = PBXGroup;
 			children = (
+				4B64CE251AF25FDC003131E3 /* Photo.swift */,
 				4B0C27CC1ABEFDA600F27D51 /* AppDelegate.swift */,
 				4B0C27CE1ABEFDA600F27D51 /* ViewController.swift */,
 				4B0C27D01ABEFDA600F27D51 /* Main.storyboard */,
@@ -232,6 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B64CE261AF25FDC003131E3 /* Photo.swift in Sources */,
 				4B0C27CF1ABEFDA600F27D51 /* ViewController.swift in Sources */,
 				4B0C27CD1ABEFDA600F27D51 /* AppDelegate.swift in Sources */,
 			);

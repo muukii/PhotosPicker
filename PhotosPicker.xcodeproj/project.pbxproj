@@ -18,6 +18,8 @@
 		4B5630141AC1D098009AC937 /* PhotosPickerCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */; };
 		4B5630161AC1D0D2009AC937 /* PhotosPickerAssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */; };
 		4B56655A1AEE52F900025B55 /* check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B5665591AEE52F900025B55 /* check@2x.png */; };
+		4B64CE241AF258CF003131E3 /* PhotosPickerCollectionsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64CE231AF258CF003131E3 /* PhotosPickerCollectionsSectionView.swift */; };
+		4B64CE281AF26189003131E3 /* PhotosPickerAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B64CE271AF26189003131E3 /* PhotosPickerAsset.swift */; };
 		4BAB886D1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BAB886C1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift */; };
 		4BE502581AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */; };
 		4BE5025A1AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */; };
@@ -48,6 +50,8 @@
 		4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionCell.swift; sourceTree = "<group>"; };
 		4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerAssetCell.swift; sourceTree = "<group>"; };
 		4B5665591AEE52F900025B55 /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
+		4B64CE231AF258CF003131E3 /* PhotosPickerCollectionsSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsSectionView.swift; sourceTree = "<group>"; };
+		4B64CE271AF26189003131E3 /* PhotosPickerAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerAsset.swift; sourceTree = "<group>"; };
 		4BAB886C1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerBaseViewController.swift; sourceTree = "<group>"; };
 		4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsSection.swift; sourceTree = "<group>"; };
 		4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosPickerCollectionsItem.swift; sourceTree = "<group>"; };
@@ -77,12 +81,14 @@
 		4B0C27F01ABEFE3A00F27D51 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				4B64CE271AF26189003131E3 /* PhotosPickerAsset.swift */,
 				4B0C27F11ABEFE8600F27D51 /* PhotosPickerController.swift */,
 				4BAB886C1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift */,
 				4B0C27F91ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift */,
 				4B0C27F71ABF18AE00F27D51 /* PhotosPickerAssetsController.swift */,
 				4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */,
 				4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */,
+				4B64CE231AF258CF003131E3 /* PhotosPickerCollectionsSectionView.swift */,
 				4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */,
 				4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */,
 				4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */,
@@ -265,6 +271,8 @@
 				4BAB886D1AEE1F5800AA8B26 /* PhotosPickerBaseViewController.swift in Sources */,
 				4B5630141AC1D098009AC937 /* PhotosPickerCollectionCell.swift in Sources */,
 				4B0C27FA1ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift in Sources */,
+				4B64CE241AF258CF003131E3 /* PhotosPickerCollectionsSectionView.swift in Sources */,
+				4B64CE281AF26189003131E3 /* PhotosPickerAsset.swift in Sources */,
 				4B0C27F21ABEFE8600F27D51 /* PhotosPickerController.swift in Sources */,
 				4B5630161AC1D0D2009AC937 /* PhotosPickerAssetCell.swift in Sources */,
 				4B0C27F41ABEFED700F27D51 /* PhotosPickerCameraController.swift in Sources */,
