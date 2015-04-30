@@ -27,6 +27,19 @@ import Photos
 public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
 
     public var collectionView: UICollectionView?
+    
+    public var item: PhotosPickerCollectionsItem? {
+        didSet {
+            
+            self.item?.requestDividedAssets(
+                { (dividedAssets) -> Void in
+                
+                    self.dividedAssets = dividedAssets
+                }
+            )
+        }
+    }
+    
     public var dividedAssets: DividedDayPhotosPickerAssets? {
         didSet {
          

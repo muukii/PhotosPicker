@@ -13,11 +13,24 @@ public class PhotosPickerCollectionsItem {
     
     public private(set) var title: String
     public private(set) var numberOfAssets: Int
-    public private(set) var assets: PhotosPickerAssets
-    public private(set) var dividedAssets: DividedDayPhotosPickerAssets?
+    public var assets: PhotosPickerAssets? {
+        didSet {
+            
+            self.cachedDividedAssets = nil
+            self.cachedTopImage = nil
+        }
+    }
+    
     public var selectionHandler: ((collectionController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void)?
     
-    public func requestDividedAssets() {
+    public func requestDividedAssets(result: ((dividedAssets: DividedDayPhotosPickerAssets) -> Void)?) {
+        
+        if let dividedAssets = self.cachedDividedAssets {
+            
+            result?(dividedAssets: dividedAssets)
+            return
+        }
+        
         
     }
     
@@ -29,25 +42,30 @@ public class PhotosPickerCollectionsItem {
             return
         }
         
-        if let topAsset: PhotosPickerAsset = self.dividedAssets?.first?.assets.first {
+        
+        self.requestDividedAssets { (dividedAssets) -> Void in
             
-            topAsset.requestImage(CGSize(width: 100, height: 100), result: { (image) -> Void in
+            if let topAsset: PhotosPickerAsset = dividedAssets.first?.assets.first {
                 
-                self.cachedTopImage = image
-                result?(image: image)
-                return
-            })
+                topAsset.requestImage(CGSize(width: 100, height: 100), result: { (image) -> Void in
+                    
+                    self.cachedTopImage = image
+                    result?(image: image)
+                    return
+                })
+            }
         }
+        
     }
     
-    public init(title: String, numberOfAssets: Int, assets: PhotosPickerAssets) {
+    public init(title: String, numberOfAssets: Int, assets: PhotosPickerAssets? = nil) {
         
         self.title = title
         self.numberOfAssets = numberOfAssets
-        self.assets = assets
-        
+        self.assets = assets        
     }
     
     // TODO: Cache
     private var cachedTopImage: UIImage?
+    private var cachedDividedAssets: DividedDayPhotosPickerAssets?
 }
