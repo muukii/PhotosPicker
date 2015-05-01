@@ -114,7 +114,7 @@ public class PhotosPicker {
         Static.observer.endObserving()
     }
     
-    /// For iOS8.x
+    /// For iOS8.x You can customize.
     public class func visiblePhotosLibraryAssetCollection() -> [PHAssetCollection] {
         
         var collections: [PHAssetCollection] = []
@@ -140,13 +140,13 @@ public class PhotosPicker {
         return collections
     }
     
-    /// For iOS7.x
+    /// For iOS7.x You can customize.
     public class func visibleAssetsLibraryAssetsGroup() -> [ALAssetsGroup] {
         
         return []
     }
     
-    public class func requestDefaultSection(result: (PhotosPickerCollectionsSection -> Void)?) {
+    class func requestDefaultSection(result: (PhotosPickerCollectionsSection -> Void)?) {
         
         if let cachedSection = Static.defaultSection {
             
