@@ -2,15 +2,13 @@
 
 import Cocoa
 
-var str = "Hello, playground"
+class A<T> {
+    
+    
+}
 
-var foo = [[String]]()
+class Ab {
+    
+}
 
-
-foo.append([""])
-
-var a = foo[0]
-
-a.append("a")
-
-foo
+A<Ab>()

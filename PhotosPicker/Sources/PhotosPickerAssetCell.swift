@@ -82,20 +82,50 @@ public class PhotosPickerAssetCell: UICollectionViewCell {
         set {
             
             super.selected = newValue
-            self._selectedOvarlayView?.hidden = !newValue
+            self._selectedOvarlayView?.alpha = newValue ? 1: 0
+        }
+    }
+    
+    public func didSelect(selected: Bool) {
+        
+        let animateView = self.contentView.snapshotViewAfterScreenUpdates(true)
+        self.addSubview(animateView)
+        self.contentView.hidden = true
+        UIView.animateKeyframesWithDuration(0.45, delay: 0, options: UIViewKeyframeAnimationOptions.BeginFromCurrentState, animations: { () -> Void in
+            
+            UIView.addKeyframeWithRelativeStartTime(0, relativeDuration: 0.15, animations: { () -> Void in
+                
+                animateView.transform = CGAffineTransformMakeScale(0.95, 0.95)
+            })
+            
+            UIView.addKeyframeWithRelativeStartTime(0.15, relativeDuration: 0.15, animations: { () -> Void in
+                
+                animateView.transform = CGAffineTransformMakeScale(1.03, 1.03)
+            })
+            
+            UIView.addKeyframeWithRelativeStartTime(0.30, relativeDuration: 0.15, animations: { () -> Void in
+                
+                animateView.transform = CGAffineTransformIdentity
+            })
+            }) { (finish) -> Void in
+                
+                animateView.removeFromSuperview()
+                self.contentView.hidden = false
         }
     }
     
     public func selectedOverlayView() -> UIView {
         
-        let imageView = UIImageView(image: UIImage(named: "check.png"))
-        return imageView
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        return view
     }
     
     private func setupSelectedOverlayView() {
         
         let view = self.selectedOverlayView()
         view.frame = self.bounds
+        view.alpha = 0
         self.contentView.addSubview(view)
         self._selectedOvarlayView = view
     }

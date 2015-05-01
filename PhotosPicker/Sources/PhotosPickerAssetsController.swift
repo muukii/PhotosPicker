@@ -48,7 +48,9 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
     }
     
     public override func viewDidLoad() {
+        
         super.viewDidLoad()
+        self.navigationItem.title = "Assets"
 
         let collectionViewLayout = UICollectionViewFlowLayout()
         
@@ -61,6 +63,7 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
         
         collectionView.registerClass(PhotosPickerAssetCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.registerClass(PhotosPickerAssetsSectionView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Section")
+        collectionView.backgroundColor = UIColor.whiteColor()
         
         self.view.addSubview(collectionView)
         self.collectionView = collectionView
@@ -78,15 +81,8 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
                 "V:|-0-[collectionView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
             )
         )
-        
-        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
     }
-    
-    deinit {
-        
-        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
-    }
-    
+
 }
 
 extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -117,8 +113,21 @@ extension PhotosPickerAssetsController: UICollectionViewDelegate, UICollectionVi
         
     public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
+        if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotosPickerAssetCell {
+            
+            cell.didSelect(true)
+        }
+    }
+    
+    public func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotosPickerAssetCell {
+            
+            cell.didSelect(false)
+        }
     }
 }
+
 
 extension PhotosPickerAssetsController: UICollectionViewDelegateFlowLayout {
     
@@ -175,12 +184,5 @@ extension PhotosPickerAssetsController: UICollectionViewDelegateFlowLayout {
         } else {
             return CGSizeMake(width,width)
         }
-    }
-}
-
-extension PhotosPickerAssetsController: PHPhotoLibraryChangeObserver {
-    
-    public func photoLibraryDidChange(changeInstance: PHChange!) {
-        
     }
 }

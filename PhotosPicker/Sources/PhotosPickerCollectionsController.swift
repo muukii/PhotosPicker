@@ -54,6 +54,8 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         
         super.viewDidLoad()
         
+        self.navigationItem.title = "Collections"
+        
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
@@ -80,10 +82,6 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         self.tableView?.registerClass(self.cellClass(), forCellReuseIdentifier: "Cell")
         self.tableView?.registerClass(self.sectionClass(), forHeaderFooterViewReuseIdentifier: "Section")
         
-        if AvailablePhotos() {
-            PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
-        }
-        
     }
     
     public override func viewDidAppear(animated: Bool) {
@@ -93,14 +91,6 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         if let selectedIndexPath = self.tableView?.indexPathForSelectedRow() {
             
             self.tableView?.deselectRowAtIndexPath(selectedIndexPath, animated: true)
-        }
-    }
-    
-    deinit {
-        
-        if AvailablePhotos() {
-            
-            PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
         }
     }
     
@@ -170,12 +160,5 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
             
             item.selectionHandler?(collectionController: self, item: item)
         }
-    }
-}
-
-extension PhotosPickerCollectionsController: PHPhotoLibraryChangeObserver {
-    
-    public func photoLibraryDidChange(changeInstance: PHChange!) {
-        
     }
 }
