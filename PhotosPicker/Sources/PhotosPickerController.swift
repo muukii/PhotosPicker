@@ -69,7 +69,7 @@ public class PhotosPickerController: UINavigationController {
     public var didFinishPickingAssets: ((controller: PhotosPickerController, assets: [PhotosPickerAsset]) -> Void)?
     public var didCancel: ((controller: PhotosPickerController) -> Void)?
     
-    public var foo: ((defaultSection: PhotosPickerCollectionsSection) -> [PhotosPickerCollectionsSection])?
+    public var setupSections: ((defaultSection: PhotosPickerCollectionsSection) -> [PhotosPickerCollectionsSection])?
     /**
     
     :returns:
@@ -89,6 +89,19 @@ public class PhotosPickerController: UINavigationController {
     public required init(coder aDecoder: NSCoder) {
         
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func viewWillAppear(animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        
+        PhotosPicker.requestDefaultCollections { assets in
+            
+            let section = PhotosPickerCollectionsSection(title: "Cameraroll")
+            section.items = assets
+            
+            self.collectionController?.sectionInfo = self.setupSections?(defaultSection: section)
+        }
     }
     
     public static var defaultSelectionHandler = { (collectionsController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void in

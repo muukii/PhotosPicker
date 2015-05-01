@@ -29,11 +29,17 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
     public weak var tableView: UITableView?
 
     public var sectionInfo: [PhotosPickerCollectionsSection]? {
-        didSet {
+        get {
             
+            return _sectionInfo
+        }
+        set {
+            
+            _sectionInfo = newValue
             self.tableView?.reloadData()
         }
     }
+    private var _sectionInfo: [PhotosPickerCollectionsSection]?
     
     public required override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         
@@ -82,6 +88,12 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         self.tableView?.registerClass(PhotosPicker.CollectionsCellClass, forCellReuseIdentifier: "Cell")
         self.tableView?.registerClass(PhotosPicker.CollectionsSectionViewClass, forHeaderFooterViewReuseIdentifier: "Section")
         
+    }
+    
+    public override func viewWillAppear(animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        self.tableView?.reloadData()
     }
     
     public override func viewDidAppear(animated: Bool) {

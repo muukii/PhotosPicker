@@ -32,30 +32,35 @@ class ViewController: UIViewController {
     }
 
     @IBAction func handleButton(sender: AnyObject) {
-        let controller = PhotosPickerController()
+        
+        let controller = PhotosPickerController.muukiiPicker()
         self.presentViewController(controller, animated: true) { () -> Void in
             
         }
+     
+    }
+}
+
+extension PhotosPickerController {
+    
+    class func muukiiPicker() -> PhotosPickerController {
         
-        PhotosPicker.requestDefaultCollections { assets in
+        let controller = PhotosPickerController()
+        controller.setupSections = { section in
             
             let section1 = PhotosPickerCollectionsSection(title: "Muukii's Photo")
             let item1 = PhotosPickerCollectionsItem(title: "Muukii's Faces", numberOfAssets: 4, assets: PhotosPickerAssetsGroup(assets: [Photo(),Photo(),Photo(),Photo()]))
             let item2 = PhotosPickerCollectionsItem(title: "Muukii's Hands", numberOfAssets: 4, assets: PhotosPickerAssetsGroup(assets: [Photo(),Photo(),Photo(),Photo()]))
             section1.items = [item1, item2]
-
-            let section2 = PhotosPickerCollectionsSection(title: "Cameraroll")
-            section2.items = assets
-            controller.collectionController?.sectionInfo = [section1, section2]
-            controller.collectionController?.tableView?.reloadData()
-                        
+            
+            return [section1, section]
         }
         
         controller.didCancel = { picker in
             
             picker.dismissViewControllerAnimated(true, completion: nil)
         }
+
+        return controller
     }
-
 }
-

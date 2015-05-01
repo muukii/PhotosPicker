@@ -115,6 +115,7 @@ public class PhotosPicker {
         if let cachedItems = Static.defaultItems {
             
             result?(cachedItems)
+            return
         }
         
         
