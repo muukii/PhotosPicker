@@ -158,7 +158,7 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
         
         if let item = self.sectionInfo?[indexPath.section].items?[indexPath.row] {
             
-            item.selectionHandler?(collectionController: self, item: item)
+            item.selectionHandler?(collectionsController: self, item: item)
         }
     }
 }

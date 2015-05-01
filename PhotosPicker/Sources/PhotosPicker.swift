@@ -110,12 +110,7 @@ public class PhotosPicker {
                     
                     let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: _assets)
                     
-                    item.selectionHandler = { (collectionController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void in
-                        
-                        let controller2 = PhotosPickerAssetsController()
-                        controller2.item = item
-                        collectionController.navigationController?.pushViewController(controller2, animated: true)
-                    }
+                    item.selectionHandler = PhotosPickerController.defaultSelectionHandler
                     items.append(item)
                     
                 }

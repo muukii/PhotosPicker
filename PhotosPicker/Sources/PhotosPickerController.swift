@@ -78,11 +78,16 @@ public class PhotosPickerController: UINavigationController {
     
     :returns:
     */
-    public init() {
-        
-        let controller = PhotosPickerCollectionsController(nibName: nil, bundle: nil)
+    public init<T: PhotosPickerCollectionsController>(collectionsControllerClass: T.Type) {
+
+        let controller = T(nibName: nil, bundle: nil)
         super.init(rootViewController: controller)
         self.collectionController = controller
+    }
+    
+    public convenience init() {
+        
+        self.init(collectionsControllerClass: PhotosPickerCollectionsController.self)
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -94,9 +99,12 @@ public class PhotosPickerController: UINavigationController {
         
         fatalError("init(coder:) has not been implemented")
     }
+    
+    public static var defaultSelectionHandler = { (collectionsController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void in
         
+        let controller = PhotosPickerAssetsController()
+        controller.item = item
+        collectionsController.navigationController?.pushViewController(controller, animated: true)
+    }
+    
 }
-
-
-
-

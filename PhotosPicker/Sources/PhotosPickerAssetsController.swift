@@ -61,8 +61,8 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
         collectionView.allowsMultipleSelection = true
         collectionView.alwaysBounceVertical = true
         
-        collectionView.registerClass(PhotosPickerAssetCell.self, forCellWithReuseIdentifier: "Cell")
-        collectionView.registerClass(PhotosPickerAssetsSectionView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Section")
+        collectionView.registerClass(self.cellClass(), forCellWithReuseIdentifier: "Cell")
+        collectionView.registerClass(self.sectionClass(), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Section")
         collectionView.backgroundColor = UIColor.whiteColor()
         
         self.view.addSubview(collectionView)
@@ -81,6 +81,16 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
                 "V:|-0-[collectionView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
             )
         )
+    }
+    
+    public func cellClass() -> PhotosPickerAssetCell.Type {
+        
+        return PhotosPickerAssetCell.self
+    }
+    
+    public func sectionClass() -> PhotosPickerAssetsSectionView.Type {
+        
+        return PhotosPickerAssetsSectionView.self
     }
 
 }

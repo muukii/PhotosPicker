@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func handleButton(sender: AnyObject) {
-        let controller = PhotosPickerController()
+        let controller = PhotosPickerController(collectionsControllerClass: PhotosPickerCollectionsController.self)
         self.presentViewController(controller, animated: true) { () -> Void in
             
         }

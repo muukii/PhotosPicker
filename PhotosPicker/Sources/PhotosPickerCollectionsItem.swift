@@ -21,7 +21,7 @@ public class PhotosPickerCollectionsItem {
         }
     }
     
-    public var selectionHandler: ((collectionController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void)?
+    public var selectionHandler: ((collectionsController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void)?
     
     public func requestDividedAssets(result: ((dividedAssets: DividedDayPhotosPickerAssets) -> Void)?) {
         
