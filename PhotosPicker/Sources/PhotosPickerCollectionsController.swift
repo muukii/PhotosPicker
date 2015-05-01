@@ -35,7 +35,7 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         }
     }
     
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    public required override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -79,8 +79,8 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
             )
         )
         
-        self.tableView?.registerClass(self.cellClass(), forCellReuseIdentifier: "Cell")
-        self.tableView?.registerClass(self.sectionClass(), forHeaderFooterViewReuseIdentifier: "Section")
+        self.tableView?.registerClass(PhotosPicker.CollectionsCellClass, forCellReuseIdentifier: "Cell")
+        self.tableView?.registerClass(PhotosPicker.CollectionsSectionViewClass, forHeaderFooterViewReuseIdentifier: "Section")
         
     }
     
@@ -93,18 +93,8 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
             self.tableView?.deselectRowAtIndexPath(selectedIndexPath, animated: true)
         }
     }
-    
-    public func cellClass() -> PhotosPickerCollectionCell.Type {
-        
-        return PhotosPickerCollectionCell.self
-    }
-    
-    public func sectionClass() -> PhotosPickerCollectionsSectionView.Type {
-        
-        return PhotosPickerCollectionsSectionView.self
-    }
-    
- }
+
+}
 
 extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDataSource {
     

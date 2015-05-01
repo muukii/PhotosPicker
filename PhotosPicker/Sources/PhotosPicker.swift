@@ -25,11 +25,21 @@ import AssetsLibrary
 
 public class PhotosPicker {
     
+    // Customize
+    public static var CollectionsControllerClass: PhotosPickerCollectionsController.Type = PhotosPickerCollectionsController.self
+    public static var CollectionsSectionViewClass: PhotosPickerCollectionsSectionView.Type = PhotosPickerCollectionsSectionView.self
+    public static var CollectionsCellClass: PhotosPickerCollectionCell.Type = PhotosPickerCollectionCell.self
+    
+    public static var AssetsControllerClass: PhotosPickerAssetsController.Type = PhotosPickerAssetsController.self
+    public static var AssetsSectionViewClass: PhotosPickerAssetsSectionView.Type = PhotosPickerAssetsSectionView.self
+    public static var AssetsCellClass: PhotosPickerAssetCell.Type = PhotosPickerAssetCell.self
+    
+    
     public class var authorizationStatus: PhotosPickerAuthorizationStatus {
         
         if AvailablePhotos() {
             
-            return PhotosPickerAuthorizationStatus(rawValue:  PHPhotoLibrary.authorizationStatus().rawValue)!
+            return PhotosPickerAuthorizationStatus(rawValue: PHPhotoLibrary.authorizationStatus().rawValue)!
         } else {
             
             return PhotosPickerAuthorizationStatus(rawValue: ALAssetsLibrary.authorizationStatus().rawValue)!
@@ -68,6 +78,38 @@ public class PhotosPicker {
         Static.observer.endObserving()
     }
     
+    /// For iOS8.x
+    public class func visiblePhotosLibraryAssetCollection() -> [PHAssetCollection] {
+        
+        var collections: [PHAssetCollection] = []
+        
+        let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+        
+        topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            
+            if let collection = collection as? PHAssetCollection {
+                collections.insert(collection, atIndex: 0)
+            }
+        }
+        
+        let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
+        
+        smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
+            
+            if let collection = collection as? PHAssetCollection {
+                collections.insert(collection, atIndex: 0)
+            }
+        }
+        
+        return collections
+    }
+    
+    /// For iOS7.x
+    public class func visibleAssetsLibraryAssetsGroup() -> [ALAssetsGroup] {
+        
+        return []
+    }
+    
     public class func requestDefaultCollections(result: ([PhotosPickerCollectionsItem] -> Void)?) {
         
         if let cachedItems = Static.defaultItems {
@@ -78,29 +120,11 @@ public class PhotosPicker {
         
         if AvailablePhotos() {
             
+            // PhotosLibrary
+            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
                 
-                // TODO: Refactor
-                
-                var collections: [PHAssetCollection] = []
-                
-                let topLevelUserCollectionsResult: PHFetchResult = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
-                
-                topLevelUserCollectionsResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
-                    
-                    if let collection = collection as? PHAssetCollection {
-                        collections.insert(collection, atIndex: 0)
-                    }
-                }
-                
-                let smartAlbumsCollectionResult: PHFetchResult = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.Any, options: nil)
-                
-                smartAlbumsCollectionResult.enumerateObjectsUsingBlock { (collection, index, stop) -> Void in
-                    
-                    if let collection = collection as? PHAssetCollection {
-                        collections.insert(collection, atIndex: 0)
-                    }
-                }
+                let collections = self.visiblePhotosLibraryAssetCollection()
                 
                 var items: [PhotosPickerCollectionsItem] = []
                 
@@ -110,9 +134,9 @@ public class PhotosPicker {
                     
                     let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: _assets)
                     
+                    //tmp
                     item.selectionHandler = PhotosPickerController.defaultSelectionHandler
                     items.append(item)
-                    
                 }
                 
                 Static.defaultItems = items
@@ -125,7 +149,7 @@ public class PhotosPicker {
             })
         } else {
             
-            
+            // AssetsLibrary
         }
     }
     

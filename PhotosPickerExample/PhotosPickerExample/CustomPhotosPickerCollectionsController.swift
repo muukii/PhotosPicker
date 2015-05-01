@@ -24,14 +24,5 @@ import PhotosPicker
 
 class CustomPhotosPickerCollectionsController: PhotosPickerCollectionsController {
     
-    override func cellClass() -> PhotosPickerCollectionCell.Type {
-        
-        return CustomPhotosPickerCollectionCell.self
-    }
-    
-    override func sectionClass() -> PhotosPickerCollectionsSectionView.Type {
-        
-        return CustomPhotosPickerCollectionsSectionView.self
-    }
 }
 

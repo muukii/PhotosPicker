@@ -57,15 +57,10 @@ public enum PhotosPickerAuthorizationStatus : Int {
     case Authorized // User has authorized this application to access photos data.
 }
 
-struct CustomClasses {
-    
-}
-
 /**
 * PhotosPickerController
 */
 public class PhotosPickerController: UINavigationController {
-        
     
     public private(set) var collectionController: PhotosPickerCollectionsController?
     
@@ -74,20 +69,16 @@ public class PhotosPickerController: UINavigationController {
     public var didFinishPickingAssets: ((controller: PhotosPickerController, assets: [PhotosPickerAsset]) -> Void)?
     public var didCancel: ((controller: PhotosPickerController) -> Void)?
     
+    public var foo: ((defaultSection: PhotosPickerCollectionsSection) -> [PhotosPickerCollectionsSection])?
     /**
     
     :returns:
     */
-    public init<T: PhotosPickerCollectionsController>(collectionsControllerClass: T.Type) {
-
-        let controller = T(nibName: nil, bundle: nil)
+    public init() {
+        
+        let controller = PhotosPicker.CollectionsControllerClass(nibName: nil, bundle: nil)
         super.init(rootViewController: controller)
         self.collectionController = controller
-    }
-    
-    public convenience init() {
-        
-        self.init(collectionsControllerClass: PhotosPickerCollectionsController.self)
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -102,7 +93,7 @@ public class PhotosPickerController: UINavigationController {
     
     public static var defaultSelectionHandler = { (collectionsController: PhotosPickerCollectionsController, item: PhotosPickerCollectionsItem) -> Void in
         
-        let controller = PhotosPickerAssetsController()
+        let controller = PhotosPicker.AssetsControllerClass()
         controller.item = item
         collectionsController.navigationController?.pushViewController(controller, animated: true)
     }

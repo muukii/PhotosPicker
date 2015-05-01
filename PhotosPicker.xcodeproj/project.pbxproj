@@ -95,11 +95,11 @@
 				4B0C27F91ABF18EA00F27D51 /* PhotosPickerCollectionsController.swift */,
 				4B64CE231AF258CF003131E3 /* PhotosPickerCollectionsSectionView.swift */,
 				4B5630131AC1D098009AC937 /* PhotosPickerCollectionCell.swift */,
-				4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */,
-				4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */,
 				4B0C27F71ABF18AE00F27D51 /* PhotosPickerAssetsController.swift */,
 				4B5630151AC1D0D2009AC937 /* PhotosPickerAssetCell.swift */,
 				4BBDA44B1AF2653300A4831E /* PhotosPickerAssetsSectionView.swift */,
+				4BE502571AE11E8B00697BA6 /* PhotosPickerCollectionsSection.swift */,
+				4BE502591AE11EC400697BA6 /* PhotosPickerCollectionsItem.swift */,
 				4B0C27F31ABEFED700F27D51 /* PhotosPickerCameraController.swift */,
 			);
 			path = Sources;
