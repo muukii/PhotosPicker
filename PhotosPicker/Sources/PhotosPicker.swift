@@ -34,6 +34,8 @@ public class PhotosPicker {
     public static var AssetsSectionViewClass: PhotosPickerAssetsSectionView.Type = PhotosPickerAssetsSectionView.self
     public static var AssetsCellClass: PhotosPickerAssetCell.Type = PhotosPickerAssetCell.self
     
+    public static var DefaultSectionTitle: String = "Cameraroll"
+    
     
     public class var authorizationStatus: PhotosPickerAuthorizationStatus {
         
@@ -66,11 +68,11 @@ public class PhotosPicker {
         Static.observer.startObserving()
         Static.observer.didChange = {
             
-            Static.defaultItems = nil
-            self.requestDefaultCollections(nil)
+            Static.defaultSection = nil
+            self.requestDefaultSection(nil)
         }
         
-        self.requestDefaultCollections(nil)
+        self.requestDefaultSection(nil)
     }
     
     public class func endPreheating() {
@@ -110,11 +112,11 @@ public class PhotosPicker {
         return []
     }
     
-    public class func requestDefaultCollections(result: ([PhotosPickerCollectionsItem] -> Void)?) {
+    public class func requestDefaultSection(result: (PhotosPickerCollectionsSection -> Void)?) {
         
-        if let cachedItems = Static.defaultItems {
+        if let cachedSection = Static.defaultSection {
             
-            result?(cachedItems)
+            result?(cachedSection)
             return
         }
         
@@ -140,11 +142,14 @@ public class PhotosPicker {
                     items.append(item)
                 }
                 
-                Static.defaultItems = items
+                let section = PhotosPickerCollectionsSection(title: self.DefaultSectionTitle)
+                section.items = items
+                
+                Static.defaultSection = section
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     
-                    result?(items)
+                    result?(section)
                 })
                 
             })
@@ -156,7 +161,7 @@ public class PhotosPicker {
     
     struct Static {
         
-        static var defaultItems: [PhotosPickerCollectionsItem]?
+        static var defaultSection: PhotosPickerCollectionsSection?
         static var observer = PhotosPickerLibraryObserver()
         static var defaultFetchOptions: PHFetchOptions = {
             

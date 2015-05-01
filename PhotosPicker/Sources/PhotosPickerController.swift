@@ -95,11 +95,8 @@ public class PhotosPickerController: UINavigationController {
         
         super.viewWillAppear(animated)
         
-        PhotosPicker.requestDefaultCollections { assets in
-            
-            let section = PhotosPickerCollectionsSection(title: "Cameraroll")
-            section.items = assets
-            
+        PhotosPicker.requestDefaultSection { section in
+                 
             self.collectionController?.sectionInfo = self.setupSections?(defaultSection: section)
         }
     }
