@@ -25,38 +25,6 @@ import Photos
 import AssetsLibrary
 import CoreLocation
 
-func AvailablePhotos() -> Bool {
-    
-    return NSClassFromString("PHAsset") != nil
-}
-
-public enum PhotosPickerAssetMediaType: Int {
-    
-    case Unknown
-    case Image
-    case Video
-    case Audio
-}
-
-extension PHAssetCollection {
-    
-    func requestNumberOfAssets() -> Int {
-       
-        let assets = PHAsset.fetchAssetsInAssetCollection(self, options: nil)
-        return assets.count
-    }
-}
-
-public enum PhotosPickerAuthorizationStatus : Int {
-    
-    case NotDetermined // User has not yet made a choice with regards to this application
-    case Restricted // This application is not authorized to access photo data.
-    // The user cannot change this application’s status, possibly due to active restrictions
-    //   such as parental controls being in place.
-    case Denied // User has explicitly denied this application access to photos data.
-    case Authorized // User has authorized this application to access photos data.
-}
-
 /**
 * PhotosPickerController
 */
@@ -95,8 +63,27 @@ public class PhotosPickerController: UINavigationController {
         
         super.viewWillAppear(animated)
         
+        self.setup()
+    }
+    
+    private func setup() {
+                        
+        if PhotosPicker.authorizationStatus != .Authorized {
+            
+            if AvailablePhotos() {
+                
+                PhotosPicker.requestAuthorization({ (status) -> Void in
+                    
+                    self.setup()
+                })
+                
+            }
+            
+            return
+        }
+        
         PhotosPicker.requestDefaultSection { section in
-                 
+            
             self.collectionController?.sectionInfo = self.setupSections?(defaultSection: section)
         }
     }

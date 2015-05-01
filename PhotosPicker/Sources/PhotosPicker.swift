@@ -23,6 +23,38 @@
 import Photos
 import AssetsLibrary
 
+func AvailablePhotos() -> Bool {
+    
+    return NSClassFromString("PHAsset") != nil
+}
+
+public enum PhotosPickerAssetMediaType: Int {
+    
+    case Unknown
+    case Image
+    case Video
+    case Audio
+}
+
+extension PHAssetCollection {
+    
+    func requestNumberOfAssets() -> Int {
+        
+        let assets = PHAsset.fetchAssetsInAssetCollection(self, options: nil)
+        return assets.count
+    }
+}
+
+public enum PhotosPickerAuthorizationStatus : Int {
+    
+    case NotDetermined // User has not yet made a choice with regards to this application
+    case Restricted // This application is not authorized to access photo data.
+    // The user cannot change this application’s status, possibly due to active restrictions
+    //   such as parental controls being in place.
+    case Denied // User has explicitly denied this application access to photos data.
+    case Authorized // User has authorized this application to access photos data.
+}
+
 public class PhotosPicker {
     
     // Customize
@@ -33,6 +65,8 @@ public class PhotosPicker {
     public static var AssetsControllerClass: PhotosPickerAssetsController.Type = PhotosPickerAssetsController.self
     public static var AssetsSectionViewClass: PhotosPickerAssetsSectionView.Type = PhotosPickerAssetsSectionView.self
     public static var AssetsCellClass: PhotosPickerAssetCell.Type = PhotosPickerAssetCell.self
+    
+    public static var PermissionDeniedControllerClass: PhotosPickerPermissionDeniedController.Type = PhotosPickerPermissionDeniedController.self
     
     public static var DefaultSectionTitle: String = "Cameraroll"
     
@@ -135,7 +169,7 @@ public class PhotosPicker {
                                                            
                     let _assets = PHAsset.fetchAssetsInAssetCollection(collection, options: Static.defaultFetchOptions)
                     
-                    let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: collection.requestNumberOfAssets(), assets: _assets)
+                    let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: _assets.count, assets: _assets)
                     
                     //tmp
                     item.selectionHandler = PhotosPickerController.defaultSelectionHandler
