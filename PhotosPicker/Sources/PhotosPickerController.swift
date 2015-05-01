@@ -247,7 +247,7 @@ class PhotosPickerLibraryObserver: NSObject {
     }
     
     private dynamic func assetsLibraryDidChange(notification: NSNotification) {
-                
+        
         self.didChange?()
     }
 }
