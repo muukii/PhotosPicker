@@ -57,7 +57,7 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
         let collectionView = UICollectionView(frame: CGRect.zeroRect, collectionViewLayout: collectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.allowsMultipleSelection = true
         collectionView.alwaysBounceVertical = true
         
@@ -72,13 +72,13 @@ public class PhotosPickerAssetsController: PhotosPickerBaseViewController {
         
         self.view.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "H:|-0-[collectionView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "H:|-0-[collectionView]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
         
         self.view.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "V:|-0-[collectionView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "V:|-0-[collectionView]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
     }
@@ -173,7 +173,7 @@ extension PhotosPickerAssetsController: UICollectionViewDelegateFlowLayout {
         return self.CalculateFittingGridSize(maxWidth: collectionView.bounds.width, numberOfItemsInRow: 4, margin: 1, index: indexPath.item)
     }
     
-    private func CalculateFittingGridSize(#maxWidth: CGFloat, numberOfItemsInRow: Int, margin: CGFloat, index: Int) -> CGSize {
+    private func CalculateFittingGridSize(maxWidth maxWidth: CGFloat, numberOfItemsInRow: Int, margin: CGFloat, index: Int) -> CGSize {
         let totalMargin: CGFloat = margin * CGFloat(numberOfItemsInRow - 1)
         let actualWidth: CGFloat = maxWidth - totalMargin
         let width: CGFloat = CGFloat(floorf(Float(actualWidth) / Float(numberOfItemsInRow)))

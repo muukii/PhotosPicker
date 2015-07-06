@@ -65,7 +65,7 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.tableFooterView = UIView()
         
         self.view.addSubview(tableView)
@@ -75,13 +75,13 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         
         self.view.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "H:|-0-[tableView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "H:|-0-[tableView]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
         
         self.view.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "V:|-0-[tableView]-0-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "V:|-0-[tableView]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
         
@@ -100,7 +100,7 @@ public class PhotosPickerCollectionsController: PhotosPickerBaseViewController {
         
         super.viewDidAppear(animated)
         
-        if let selectedIndexPath = self.tableView?.indexPathForSelectedRow() {
+        if let selectedIndexPath = self.tableView?.indexPathForSelectedRow {
             
             self.tableView?.deselectRowAtIndexPath(selectedIndexPath, animated: true)
         }
@@ -132,7 +132,7 @@ extension PhotosPickerCollectionsController: UITableViewDelegate, UITableViewDat
     
     public func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        if cell.respondsToSelector("preservesSuperviewLayoutMargins") {
+        if #available(iOS 8.0, *) {
             cell.preservesSuperviewLayoutMargins = false
             cell.layoutMargins = UIEdgeInsetsZero
         }

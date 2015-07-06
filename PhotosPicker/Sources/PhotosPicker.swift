@@ -36,6 +36,7 @@ public enum PhotosPickerAssetMediaType: Int {
     case Audio
 }
 
+@available(iOS 8.0, *)
 extension PHAssetCollection {
     
     func requestNumberOfAssets() -> Int {
@@ -73,7 +74,7 @@ public class PhotosPicker {
     
     public class var authorizationStatus: PhotosPickerAuthorizationStatus {
         
-        if AvailablePhotos() {
+        if #available(iOS 8.0, *) {
             
             return PhotosPickerAuthorizationStatus(rawValue: PHPhotoLibrary.authorizationStatus().rawValue)!
         } else {
@@ -82,10 +83,9 @@ public class PhotosPicker {
         }
     }
     
-    @availability(iOS, introduced=8.0)
     public class func requestAuthorization(handler: ((PhotosPickerAuthorizationStatus) -> Void)?) {
         
-        if AvailablePhotos() {
+        if #available(iOS 8.0, *) {
             
             PHPhotoLibrary.requestAuthorization({ (status) -> Void in
                 let status = PhotosPickerAuthorizationStatus(rawValue: status.rawValue)!
@@ -115,6 +115,7 @@ public class PhotosPicker {
     }
     
     /// For iOS8.x You can customize.
+    @available(iOS 8.0, *)
     public class func visiblePhotosLibraryAssetCollection() -> [PHAssetCollection] {
         
         var collections: [PHAssetCollection] = []
@@ -155,7 +156,7 @@ public class PhotosPicker {
         }
         
         
-        if AvailablePhotos() {
+        if #available(iOS 8.0, *) {
             
             // PhotosLibrary
             
@@ -169,7 +170,8 @@ public class PhotosPicker {
                                                            
                     let _assets = PHAsset.fetchAssetsInAssetCollection(collection, options: Static.defaultFetchOptions)
                     
-                    let item = PhotosPickerCollectionsItem(title: collection.localizedTitle, numberOfAssets: _assets.count, assets: _assets)
+                    let title = collection.localizedTitle ?? ""
+                    let item = PhotosPickerCollectionsItem(title: title, numberOfAssets: _assets.count, assets: _assets)
                     
                     //tmp
                     item.selectionHandler = PhotosPickerController.defaultSelectionHandler
@@ -197,6 +199,7 @@ public class PhotosPicker {
         
         static var defaultSection: PhotosPickerCollectionsSection?
         static var observer = PhotosPickerLibraryObserver()
+        @available(iOS 8.0, *)
         static var defaultFetchOptions: PHFetchOptions = {
             
             let options: PHFetchOptions = PHFetchOptions()
@@ -223,9 +226,9 @@ class PhotosPickerLibraryObserver: NSObject {
         
         self.isObserving = true
         
-        if AvailablePhotos() {
+        if #available(iOS 8.0, *) {
             
-            PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+//            PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
         } else {
             
             NSNotificationCenter.defaultCenter().addObserver(self, selector: "assetsLibraryDidChange:", name: ALAssetsLibraryChangedNotification, object: nil)
@@ -236,9 +239,9 @@ class PhotosPickerLibraryObserver: NSObject {
         
         self.isObserving = false
         
-        if AvailablePhotos() {
+        if #available(iOS 8.0, *) {
             
-            PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+//            PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
         } else {
             
             NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -251,11 +254,17 @@ class PhotosPickerLibraryObserver: NSObject {
     }
 }
 
-extension PhotosPickerLibraryObserver: PHPhotoLibraryChangeObserver {
-    
-    func photoLibraryDidChange(changeInstance: PHChange!) {
-        
-        // temp
-        self.didChange?()
-    }
-}
+//@available(iOS 8.0, *)
+//extension PhotosPickerLibraryObserver: PHPhotoLibraryChangeObserver {
+//    
+////    func photoLibraryDidChange(changeInstance: PHChange) {
+////        
+////        // temp
+////        self.didChange?()
+////    }
+//    
+//    @available(iOS 8.0, *)
+//    func photoLibraryDidChange(changeInstance: PHChange) {
+//        
+//    }
+//}

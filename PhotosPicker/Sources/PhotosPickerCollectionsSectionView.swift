@@ -31,12 +31,12 @@ public class PhotosPickerCollectionsSectionView: UITableViewHeaderFooterView {
         self.setAppearance()
     }
     
-    override init(frame: CGRect) {
-        
-        super.init(frame: frame)
-        self.setup()
-        self.setAppearance()
-    }
+//    override init(frame: CGRect) {
+//        
+//        super.init(frame: frame)
+//        self.setup()
+//        self.setAppearance()
+//    }
 
     public required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -67,10 +67,10 @@ public class PhotosPickerCollectionsSectionView: UITableViewHeaderFooterView {
     public func setup() {
     
         let sectionTitleLabel = UILabel()
-        sectionTitleLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         self.contentView.addSubview(sectionTitleLabel)
-        self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
         
         self.sectionTitleLabel = sectionTitleLabel
         
@@ -80,7 +80,7 @@ public class PhotosPickerCollectionsSectionView: UITableViewHeaderFooterView {
         
         self.contentView.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "|-(10)-[sectionTitleLabel]-(10)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "|-(10)-[sectionTitleLabel]-(10)-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
         

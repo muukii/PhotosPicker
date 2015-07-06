@@ -30,10 +30,10 @@ public protocol PhotosPickerAsset {
     var pixelWidth: Int { get }
     var pixelHeight: Int { get }
     
-    var creationDate: NSDate! { get }
-    var modificationDate: NSDate! { get }
+    var creationDate: NSDate? { get }
+    var modificationDate: NSDate? { get }
     
-    var location: CLLocation! { get }
+    var location: CLLocation? { get }
     var duration: NSTimeInterval { get }
     
     var hidden: Bool { get }
@@ -42,6 +42,7 @@ public protocol PhotosPickerAsset {
     func requestImage(targetSize: CGSize, result: ((image: UIImage?) -> Void)?)
 }
 
+@available(iOS 8.0, *)
 extension PHAsset: PhotosPickerAsset {
     
     public var photosObjectMediaType: PhotosPickerAssetMediaType {
@@ -75,19 +76,19 @@ extension ALAsset: PhotosPickerAsset {
         return Int(self.defaultRepresentation().dimensions().height)
     }
     
-    public var creationDate: NSDate! {
+    public var creationDate: NSDate? {
         
-        return self.valueForProperty(ALAssetPropertyDate) as! NSDate
+        return self.valueForProperty(ALAssetPropertyDate) as? NSDate
     }
     
-    public var modificationDate: NSDate! {
+    public var modificationDate: NSDate? {
         
-        return self.valueForProperty(ALAssetPropertyDate) as! NSDate
+        return self.valueForProperty(ALAssetPropertyDate) as? NSDate
     }
     
-    public var location: CLLocation! {
+    public var location: CLLocation? {
         
-        return self.valueForProperty(ALAssetPropertyLocation) as! CLLocation
+        return self.valueForProperty(ALAssetPropertyLocation) as? CLLocation
     }
     
     public var duration: NSTimeInterval {

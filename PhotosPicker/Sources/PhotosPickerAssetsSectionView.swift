@@ -35,7 +35,7 @@ public class PhotosPickerAssetsSectionView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public class func sizeForSection(#collectionView: UICollectionView) -> CGSize {
+    public class func sizeForSection(collectionView collectionView: UICollectionView) -> CGSize {
 
         return CGSize(width: collectionView.bounds.width, height: 30)
     }
@@ -67,10 +67,10 @@ public class PhotosPickerAssetsSectionView: UICollectionReusableView {
     public func setup() {
         
         let sectionTitleLabel = UILabel()
-        sectionTitleLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(sectionTitleLabel)
-        self.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.translatesAutoresizingMaskIntoConstraints = false
         
         self.sectionTitleLabel = sectionTitleLabel
         
@@ -80,7 +80,7 @@ public class PhotosPickerAssetsSectionView: UICollectionReusableView {
         
         self.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "|-(10)-[sectionTitleLabel]-(10)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "|-(10)-[sectionTitleLabel]-(10)-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
         

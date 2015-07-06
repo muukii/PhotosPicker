@@ -40,7 +40,7 @@ public class PhotosPickerController: UINavigationController {
     public var setupSections: ((defaultSection: PhotosPickerCollectionsSection) -> [PhotosPickerCollectionsSection])?
     /**
     
-    :returns:
+    - returns:
     */
     public init() {
         

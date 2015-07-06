@@ -94,10 +94,10 @@ public class PhotosPickerCollectionCell: UITableViewCell {
         let thumbnailImageView = UIImageView()
         thumbnailImageView.contentMode = .ScaleAspectFill
         thumbnailImageView.clipsToBounds = true
-        thumbnailImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
         let collectionTitleLabel = UILabel()
-        collectionTitleLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        collectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         self.contentView.addSubview(thumbnailImageView)
         self.contentView.addSubview(collectionTitleLabel)
@@ -113,13 +113,13 @@ public class PhotosPickerCollectionCell: UITableViewCell {
         
         self.contentView.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "V:|-(10)-[thumbnailImageView(50)]", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "V:|-(10)-[thumbnailImageView(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
         
         self.contentView.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "|-(10)-[thumbnailImageView(50)]-(10)-[collectionTitleLabel]-(10)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "|-(10)-[thumbnailImageView(50)]-(10)-[collectionTitleLabel]-(10)-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
         

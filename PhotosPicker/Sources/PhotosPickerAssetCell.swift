@@ -50,7 +50,7 @@ public class PhotosPickerAssetCell: UICollectionViewCell {
         let thumbnailImageView = UIImageView()
         thumbnailImageView.contentMode = .ScaleAspectFill
         thumbnailImageView.clipsToBounds = true
-        thumbnailImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         
         self.contentView.addSubview(thumbnailImageView)
         
@@ -63,13 +63,13 @@ public class PhotosPickerAssetCell: UICollectionViewCell {
         
         self.contentView.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "V:|-(0)-[thumbnailImageView]-(0)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "V:|-(0)-[thumbnailImageView]-(0)-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
         
         self.contentView.addConstraints(
             NSLayoutConstraint.constraintsWithVisualFormat(
-                "H:|-(0)-[thumbnailImageView]-(0)-|", options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views
+                "H:|-(0)-[thumbnailImageView]-(0)-|", options: NSLayoutFormatOptions(), metrics: nil, views: views
             )
         )
     }

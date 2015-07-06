@@ -54,7 +54,7 @@ public class PhotosPickerAssetsGroup: PhotosPickerAssets {
     
     public func enumerateAssetsUsingBlock(block: ((asset: PhotosPickerAsset) -> Void)?) {
         
-        let sortedAssets = self.assets.sorted({ $0.creationDate.compare($1.creationDate) == NSComparisonResult.OrderedDescending })
+        let sortedAssets = self.assets.sort({ $0.creationDate?.compare($1.creationDate ?? NSDate()) == NSComparisonResult.OrderedDescending })
         for asset in sortedAssets {
             
             block?(asset: asset)
@@ -62,6 +62,7 @@ public class PhotosPickerAssetsGroup: PhotosPickerAssets {
     }
 }
 
+@available(iOS 8.0, *)
 extension PHFetchResult: PhotosPickerAssets {
     
     public func requestDividedAssets(result: ((dividedAssets: DividedDayPhotosPickerAssets) -> Void)?) {
@@ -115,7 +116,7 @@ extension ALAssetsGroup: PhotosPickerAssets {
 
 public typealias DividedDayPhotosPickerAssets = [DayPhotosPickerAssets]
 
-public struct DayPhotosPickerAssets: Printable {
+public struct DayPhotosPickerAssets: CustomStringConvertible {
     
     public var date: NSDate
     public var assets: [PhotosPickerAsset] = []
@@ -128,12 +129,12 @@ public struct DayPhotosPickerAssets: Printable {
     
     public var description: String {
         
-        var string: String = "\n Date:\(date) \nAssets: \(assets) \n"
+        let string: String = "\n Date:\(date) \nAssets: \(assets) \n"
         return string
     }
 }
 
-private func divideByDay(#dateSortedAssets: PhotosPickerAssets) -> DividedDayPhotosPickerAssets {
+private func divideByDay(dateSortedAssets dateSortedAssets: PhotosPickerAssets) -> DividedDayPhotosPickerAssets {
     
     var dayAssets = DividedDayPhotosPickerAssets()
     
@@ -164,7 +165,7 @@ private func divideByDay(#dateSortedAssets: PhotosPickerAssets) -> DividedDayPho
 private func dateWithOutTime(date: NSDate!) -> NSDate {
     
     let calendar: NSCalendar = NSCalendar.currentCalendar()
-    let units: NSCalendarUnit = NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay
+    let units: NSCalendarUnit = [NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day]
     let comp: NSDateComponents = calendar.components(units, fromDate: date)
     return calendar.dateFromComponents(comp)!
 }
